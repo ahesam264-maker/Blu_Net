@@ -1,4 +1,4 @@
-name: Build Debug APK
+name: Build Blu net APK
 
 on:
   workflow_dispatch:
@@ -78,6 +78,17 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '21'
+
+    - name: Install Pillow (for app icon)
+      run: pip install pillow --break-system-packages || pip install pillow
+
+    - name: Apply Blu net patch
+      run: python3 abinet/patch.py
+
+    - name: Use fixed signing key (so updates install over old versions)
+      run: |
+        mkdir -p ~/.android
+        cp abinet/debug.keystore ~/.android/debug.keystore
 
     - name: Build debug APK
       run: |
