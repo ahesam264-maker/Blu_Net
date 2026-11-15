@@ -79,6 +79,10 @@ jobs:
         distribution: 'temurin'
         java-version: '21'
 
+    - name: Build fast offline UI (falls back to the normal UI if this fails)
+      continue-on-error: true
+      run: python3 abinet/build_web.py
+
     - name: Install Pillow (for app icon)
       run: pip install pillow --break-system-packages || pip install pillow
 
