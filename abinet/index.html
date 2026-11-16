@@ -1,0 +1,2183 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#2563eb" />
+    <meta name="description" content="Blu net — وی‌پی‌ان هوشمند با مدیریت اشتراک‌ها و کانفیگ‌ها" />
+    <title>Blu net | وی‌پی‌ان هوشمند</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z'/%3E%3Cpath d='M12 8v4'/%3E%3Cpath d='M12 15h.01'/%3E%3C/svg%3E" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: { sans: ['Vazirmatn', 'Segoe UI', 'system-ui', 'sans-serif'] },
+            animation: {
+              'spin-slow': 'spin 14s linear infinite',
+              'spin-slower': 'spin 26s linear infinite reverse',
+              'orbit': 'orbit 6s linear infinite',
+              'breathe': 'breathe 3.2s ease-in-out infinite',
+              'fade-up': 'fadeUp .5s cubic-bezier(.22,1,.36,1) both',
+              'pop': 'pop .35s cubic-bezier(.34,1.56,.64,1) both',
+              'slide-down': 'slideDown .3s cubic-bezier(.22,1,.36,1) both',
+              'blob': 'blob 18s ease-in-out infinite',
+              'shimmer': 'shimmer 2.4s linear infinite',
+              'blink': 'blink 1.6s ease-in-out infinite',
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+
+#bs-splash{position:fixed;inset:0;z-index:99999;background:#FFFFFF;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:Arial,sans-serif;direction:ltr;transition:opacity .28s ease}
+#bs-splash.bs-out{opacity:0;pointer-events:none}
+#bs-splash .bs-logo-area{width:190px;height:190px;position:relative;display:flex;justify-content:center;align-items:center}
+#bs-splash .bs-wave{position:absolute;width:125px;height:125px;border:2px solid #0755D9;border-radius:32px;opacity:0;animation:bs-ripple 2.8s infinite}
+#bs-splash .bs-wave:nth-child(2){animation-delay:.7s}
+#bs-splash .bs-wave:nth-child(3){animation-delay:1.4s}
+@keyframes bs-ripple{0%{transform:scale(1);opacity:.65}100%{transform:scale(1.65);opacity:0}}
+#bs-splash .bs-logo{width:115px;height:115px;background:#FFFFFF;border-radius:30px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 35px #0755cc20;z-index:2;animation:bs-appear 1s ease-out forwards}
+#bs-splash .bs-letter{font-family:Arial,sans-serif;font-size:100px;font-weight:900;line-height:1;color:#0647C7;transform:translateY(-3px)}
+@keyframes bs-appear{0%{transform:scale(.2);opacity:0}70%{transform:scale(1.12);opacity:1}100%{transform:scale(1);opacity:1}}
+#bs-splash .bs-brand{margin-top:30px;color:#0647C7;font-size:29px;font-weight:800;letter-spacing:.5px}
+#bs-splash .bs-sub{margin-top:9px;color:#8492A6;font-size:12px;letter-spacing:1px}
+#bs-splash .bs-loading{position:absolute;bottom:55px;width:72%;max-width:310px;text-align:center}
+#bs-splash .bs-bg{width:100%;height:5px;background:#E8EFFB;border-radius:20px;overflow:hidden}
+#bs-splash .bs-bar{width:0%;height:100%;background:#0755D9;border-radius:20px;transition:width .15s linear}
+#bs-splash .bs-pct{color:#0647C7;font-size:12px;margin-top:12px}
+html, body, #root { height: 100%; }
+body {
+  font-family: 'Vazirmatn', 'Segoe UI', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior: none;
+}
+* { -webkit-tap-highlight-color: transparent; }
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes orbit {
+  from { transform: rotate(0deg) translateX(118px) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(118px) rotate(-360deg); }
+}
+@keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+@keyframes breatheLight { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+.animate-breathe { box-shadow: 0 0 60px 6px rgba(59,130,246,.5), inset 0 0 22px rgba(255,255,255,.16); will-change: transform; }
+.drawer-in { animation: drawerIn .22s ease-out both; }
+@keyframes drawerIn { from { transform: translateX(100%); } to { transform: none; } }
+.cfg-row { content-visibility: auto; contain-intrinsic-size: auto 64px; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pop {
+  from { opacity: 0; transform: scale(.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes blob {
+  0%, 100% { transform: translate(0,0) scale(1); }
+  33%      { transform: translate(40px,-50px) scale(1.12); }
+  66%      { transform: translate(-34px,30px) scale(.94); }
+}
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .35; }
+}
+
+html, body, #root { height: 100%; }
+
+body {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior: none;
+}
+
+* { -webkit-tap-highlight-color: transparent; }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+.thin-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+.thin-scroll::-webkit-scrollbar-track { background: transparent; }
+.thin-scroll::-webkit-scrollbar-thumb { background: rgba(59,130,246,.35); border-radius: 99px; }
+
+.num { font-feature-settings: "ss01"; font-variant-numeric: tabular-nums; }
+
+.glass {
+  background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(255,255,255,.84));
+}
+.dark .glass {
+  background: linear-gradient(145deg, rgba(17,25,46,.94), rgba(10,15,30,.9));
+}
+
+.text-shine {
+  background: linear-gradient(110deg, #60a5fa 20%, #e0f2fe 42%, #60a5fa 60%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.light .text-shine {
+  background: linear-gradient(110deg, #1d4ed8 20%, #38bdf8 42%, #1d4ed8 60%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+@keyframes ringPulse {
+  0% { transform: scale(.86); opacity: .7; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+.ring-pulse {
+  animation: ringPulse 2s cubic-bezier(.2,.6,.36,1) infinite;
+}
+
+@keyframes gridDrift {
+  from { background-position: 0 0; }
+  to { background-position: 44px 44px; }
+}
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(59,130,246,.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(59,130,246,.09) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+.dark .bg-grid {
+  background-image:
+    linear-gradient(to right, rgba(96,165,250,.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(96,165,250,.07) 1px, transparent 1px);
+}
+
+@keyframes dashMove { to { stroke-dashoffset: -120; } }
+.dash-move { animation: dashMove 3.4s linear infinite; }
+
+input::placeholder, textarea::placeholder { opacity: .45; }
+    </style>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "react": "https://esm.sh/react@19.2.0",
+          "react-dom": "https://esm.sh/react-dom@19.2.0",
+          "react-dom/client": "https://esm.sh/react-dom@19.2.0/client",
+          "lucide-react": "https://esm.sh/lucide-react@0.462.0?external=react",
+          "clsx": "https://esm.sh/clsx@2.1.1",
+          "tailwind-merge": "https://esm.sh/tailwind-merge@2.5.5"
+        }
+      }
+    </script>
+  </head>
+  <body>
+<div id="bs-splash">
+  <div class="bs-logo-area">
+    <div class="bs-wave"></div><div class="bs-wave"></div><div class="bs-wave"></div>
+    <div class="bs-logo"><span class="bs-letter">B</span></div>
+  </div>
+  <div class="bs-brand">Blu Net</div>
+  <div class="bs-sub">CONNECTING YOUR WORLD</div>
+  <div class="bs-loading">
+    <div class="bs-bg"><div class="bs-bar" id="bs-bar"></div></div>
+    <div class="bs-pct" id="bs-pct">0%</div>
+  </div>
+</div>
+<script>
+(function () {
+  var el = document.getElementById('bs-splash'), bar = document.getElementById('bs-bar'), pct = document.getElementById('bs-pct');
+  if (!el) return;
+  var p = 0, done = false, t0 = Date.now(), MIN = 900;
+  function set(v) { p = v; bar.style.width = v + '%'; pct.textContent = Math.floor(v) + '%'; }
+  var timer = setInterval(function () { if (done) return; p += (90 - p) * 0.06 + 0.3; if (p > 90) p = 90; set(p); }, 60);
+  window.__bluReady = function () {
+    if (done) return; done = true;
+    setTimeout(function () {
+      clearInterval(timer); set(100);
+      setTimeout(function () { el.classList.add('bs-out'); setTimeout(function () { el.remove(); }, 320); }, 180);
+    }, Math.max(0, MIN - (Date.now() - t0)));
+  };
+  setTimeout(function () { if (!done) pct.textContent = 'بارگذاری طولانی شد؛ اینترنت را بررسی کنید'; }, 20000);
+})();
+</script>
+    <div id="root"></div>
+    <script type="module">
+import React, { useState, useEffect, useMemo, useRef, useId, StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import clsx from "clsx";
+import { twMerge } from "tailwind-merge";
+import {
+  AlertCircle, CheckCircle2, Info, ClipboardPaste, CloudUpload, Code2, Link2, Loader2, Package,
+  Plus, Rocket, Rss, ShieldAlert, Smartphone, TriangleAlert, Power, X, ArrowUpDown, PenLine,
+  RefreshCw, ServerOff, Trash2, Zap, Layers, Check, Globe, LayoutGrid, Database, Download,
+  FileQuestion, Moon, Palette, ShieldCheck, Sparkles, Sun, Wand2, FlaskConical,
+  Home as HomeIcon, Server, Settings as SettingsIcon, Activity, ArrowDownToLine, ArrowUpFromLine,
+  ChevronDown, Clock, Signal, Timer, Menu, Bell, Cpu, Scissors, Route, SlidersHorizontal, Search, Copy, QrCode, ListChecks,
+} from "lucide-react";
+
+/* ===== types.ts ===== */
+
+
+
+/* ===== utils/cn.ts ===== */
+function cn(...inputs) {
+    return twMerge(clsx(inputs));
+}
+
+
+/* ===== lib/utils.ts ===== */
+function subIcon(sub) {
+    if (!sub)
+        return LayoutGrid;
+    if (sub.builtIn === 'default')
+        return ShieldCheck;
+    if (sub.builtIn === 'demo')
+        return FlaskConical;
+    return Rss;
+}
+/* ---------- Persian number helpers ---------- */
+const fa = (n, frac = 0) => Number(n).toLocaleString('fa-IR', { maximumFractionDigits: frac });
+function faDuration(totalSec) {
+    const h = Math.floor(totalSec / 3600);
+    const m = Math.floor((totalSec % 3600) / 60);
+    const s = totalSec % 60;
+    const p = (x) => String(x).padStart(2, '0');
+    const str = h > 0 ? `${p(h)}:${p(m)}:${p(s)}` : `${p(m)}:${p(s)}`;
+    return str.replace(/\d/g, (d) => '۰۱۲۳۴۵۶۷۸۹'[Number(d)]);
+}
+function relTime(ts) {
+    if (!ts)
+        return '—';
+    const diff = Math.max(0, Date.now() - ts);
+    const min = Math.floor(diff / 60000);
+    if (min < 1)
+        return 'هم‌اکنون';
+    if (min < 60)
+        return `${fa(min)} دقیقه پیش`;
+    const h = Math.floor(min / 60);
+    if (h < 24)
+        return `${fa(h)} ساعت پیش`;
+    const d = Math.floor(h / 24);
+    return `${fa(d)} روز پیش`;
+}
+const randId = () => Math.random().toString(36).slice(2, 10) + Date.now().toString(36);
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+/* ---------- Deterministic hashing (drives simulation) ---------- */
+function hashStr(s) {
+    let h = 2166136261;
+    for (let i = 0; i < s.length; i++) {
+        h ^= s.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+    }
+    return Math.abs(h >>> 0);
+}
+/* ---------- Latency / bandwidth simulation engine ---------- */
+function baseLatency(server, port) {
+    const h = hashStr((server || 'x').toLowerCase() + ':' + port);
+    if (h % 13 === 0)
+        return -1; // some endpoints never answer
+    return 32 + (h % 520);
+}
+/** Simulated ping with live jitter. -1 means timeout. */
+function testLatency(cfg) {
+    const b = baseLatency(cfg.server, cfg.port);
+    if (b === -1)
+        return Math.random() < 0.88 ? -1 : 280 + Math.floor(Math.random() * 260);
+    return Math.max(9, Math.round(b * (0.82 + Math.random() * 0.42)));
+}
+/** Derived throughput (Mbps) from latency. */
+function speedFromPing(ping) {
+    const raw = Math.max(2.4, Math.min(240, 11500 / (ping + 42)));
+    return Math.round(raw * 10) / 10;
+}
+/** Plausible exit IP generated per server. */
+function fakeIp(server) {
+    const h = hashStr(server || 'abinet');
+    const pools = [5, 31, 45, 77, 103, 146, 178, 185];
+    return `${pools[h % pools.length]}.${(h >> 3) % 255}.${(h >> 7) % 255}.${((h >> 11) % 252) + 2}`;
+}
+/* ---------- Protocol appearance ---------- */
+const PROTOCOL_META = {
+    vless: { abbr: 'VL', label: 'VLESS', color: '#38bdf8' },
+    vmess: { abbr: 'VM', label: 'VMess', color: '#818cf8' },
+    trojan: { abbr: 'TR', label: 'Trojan', color: '#2dd4bf' },
+    ss: { abbr: 'SS', label: 'Shadowsocks', color: '#a78bfa' },
+    ssr: { abbr: 'SR', label: 'SSR', color: '#c084fc' },
+    hysteria: { abbr: 'HY', label: 'Hysteria', color: '#f472b6' },
+    hysteria2: { abbr: 'HY', label: 'Hysteria2', color: '#f472b6' },
+    hy2: { abbr: 'HY', label: 'Hysteria2', color: '#f472b6' },
+    tuic: { abbr: 'TU', label: 'TUIC', color: '#fbbf24' },
+    wireguard: { abbr: 'WG', label: 'WireGuard', color: '#34d399' },
+    wg: { abbr: 'WG', label: 'WireGuard', color: '#34d399' },
+    socks: { abbr: 'SK', label: 'SOCKS', color: '#60a5fa' },
+    socks5: { abbr: 'SK', label: 'SOCKS5', color: '#60a5fa' },
+    http: { abbr: 'HT', label: 'HTTP', color: '#94a3b8' },
+    https: { abbr: 'HT', label: 'HTTPS', color: '#94a3b8' },
+};
+function protoMeta(protocol) {
+    return PROTOCOL_META[protocol] || { abbr: protocol.slice(0, 2).toUpperCase(), label: protocol.toUpperCase(), color: '#64748b' };
+}
+function pingTone(ping) {
+    if (ping === undefined)
+        return { text: 'text-slate-400 dark:text-slate-500', bg: 'bg-slate-400/10', dot: 'bg-slate-400', label: '—' };
+    if (ping < 0)
+        return { text: 'text-rose-500 dark:text-rose-400', bg: 'bg-rose-500/10', dot: 'bg-rose-500', label: 'مهلت' };
+    if (ping < 150)
+        return { text: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-500/10', dot: 'bg-emerald-500', label: `${fa(ping)} ms` };
+    if (ping < 320)
+        return { text: 'text-sky-600 dark:text-sky-400', bg: 'bg-sky-500/10', dot: 'bg-sky-500', label: `${fa(ping)} ms` };
+    if (ping < 650)
+        return { text: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10', dot: 'bg-amber-500', label: `${fa(ping)} ms` };
+    return { text: 'text-rose-600 dark:text-rose-400', bg: 'bg-rose-500/10', dot: 'bg-rose-500', label: `${fa(ping)} ms` };
+}
+
+
+/* ===== lib/parse.ts ===== */
+const KNOWN_PROTOCOLS = [
+    'vless', 'vmess', 'trojan', 'ss', 'ssr', 'hysteria', 'hysteria2', 'hy2',
+    'tuic', 'wireguard', 'wg', 'socks', 'socks5', 'http', 'https',
+];
+function b64DecodeUnicode(b64) {
+    const clean = b64.trim().replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/');
+    const pad = clean.length % 4 ? '='.repeat(4 - (clean.length % 4)) : '';
+    const bin = atob(clean + pad);
+    const bytes = Uint8Array.from(bin, (c) => c.charCodeAt(0));
+    return new TextDecoder('utf-8').decode(bytes);
+}
+function b64EncodeUnicode(str) {
+    const bytes = new TextEncoder().encode(str);
+    let bin = '';
+    bytes.forEach((b) => (bin += String.fromCharCode(b)));
+    return btoa(bin);
+}
+function isProbablyBase64(t) {
+    const s = t.trim().replace(/\s+/g, '');
+    return s.length > 8 && /^[A-Za-z0-9+/_-]+={0,2}$/.test(s);
+}
+function safeDecode(s) {
+    try {
+        return decodeURIComponent(s);
+    }
+    catch {
+        return s;
+    }
+}
+/** Parse a single proxy URI line (vmess/vless/trojan/ss/...) */
+function parseConfigLine(line) {
+    const raw = line.trim();
+    if (!raw || !raw.includes('://'))
+        return null;
+    const protocol = raw.split('://')[0].toLowerCase().trim();
+    if (!KNOWN_PROTOCOLS.includes(protocol))
+        return null;
+    // ss / ssr links without '@' are fully base64-encoded
+    if (protocol === 'ss' || protocol === 'ssr') {
+        const hashIdx = raw.indexOf('#');
+        const bodyOnly = hashIdx >= 0 ? raw.slice(0, hashIdx) : raw;
+        const nameFromHash = hashIdx >= 0 ? safeDecode(raw.slice(hashIdx + 1).trim()) : '';
+        if (!bodyOnly.includes('@')) {
+            try {
+                const decoded = b64DecodeUnicode(bodyOnly.slice(protocol.length + 3));
+                // ss: method:pass@host:port
+                let m = decoded.match(/@([^:\/?#]+):(\d+)/);
+                if (m) {
+                    return { name: nameFromHash || `${protocol.toUpperCase()}-${m[1]}`, protocol: 'ss', server: m[1], port: m[2], raw };
+                }
+                // ssr: host:port:proto:method:obfs:b64pass/?...&remarks=b64
+                const sm = decoded.match(/^([^:\/]+):(\d+):/);
+                if (sm) {
+                    let name = nameFromHash;
+                    const rm = decoded.match(/remarks=([^&]+)/);
+                    if (rm) {
+                        try {
+                            name = b64DecodeUnicode(rm[1]).trim() || name;
+                        }
+                        catch { /* keep */ }
+                    }
+                    return { name: name || `SSR-${sm[1]}`, protocol: 'ssr', server: sm[1], port: sm[2], raw };
+                }
+                return null;
+            }
+            catch {
+                return null;
+            }
+        }
+    }
+    // vmess carries a base64 JSON payload
+    if (protocol === 'vmess') {
+        try {
+            const json = JSON.parse(b64DecodeUnicode(raw.slice('vmess://'.length)));
+            const server = String(json.add || json.host || '');
+            if (!server)
+                return null;
+            return {
+                name: String(json.ps || json.remarks || `VMess-${server}`),
+                protocol,
+                server,
+                port: String(json.port ?? ''),
+                raw,
+            };
+        }
+        catch {
+            return null;
+        }
+    }
+    // standard URL-like schemes
+    try {
+        const u = new URL(raw);
+        const name = safeDecode((u.hash || '').replace(/^#/, '').trim());
+        const server = u.hostname.replace(/^\[|\]$/g, '');
+        if (!server)
+            return null;
+        return {
+            name: name || `${protocol.toUpperCase()}-${server}`,
+            protocol,
+            server,
+            port: u.port || (protocol === 'http' ? '80' : '443'),
+            raw,
+        };
+    }
+    catch {
+        // ss links may be fully base64: ss://BASE64#name
+        try {
+            const body = raw.slice(protocol.length + 3);
+            const hashIdx = body.indexOf('#');
+            const name = hashIdx >= 0 ? safeDecode(body.slice(hashIdx + 1)) : '';
+            const decoded = b64DecodeUnicode(hashIdx >= 0 ? body.slice(0, hashIdx) : body);
+            const m = decoded.match(/@([^:\/?#]+):(\d+)/);
+            if (m) {
+                return { name: name || `SS-${m[1]}`, protocol, server: m[1], port: m[2], raw };
+            }
+        }
+        catch {
+            /* ignore */
+        }
+        return null;
+    }
+}
+/** Parse pasted text or subscription body (plain or base64) into configs. */
+function subNameFromUrl(u) {
+    try {
+        const x = new URL(u);
+        const h = decodeURIComponent((x.hash || '').replace(/^#/, ''));
+        return h || x.hostname;
+    }
+    catch {
+        return 'اشتراک';
+    }
+}
+function parseImportText(text) {
+    const out = [];
+    const seen = new Set();
+    const pushLines = (t) => {
+        t.split(/\r?\n/).forEach((line) => {
+            const p = parseConfigLine(line);
+            if (p && !seen.has(p.raw)) {
+                seen.add(p.raw);
+                out.push(p);
+            }
+        });
+    };
+    pushLines(text);
+    if (out.length === 0 && isProbablyBase64(text)) {
+        try {
+            pushLines(b64DecodeUnicode(text));
+        }
+        catch {
+            /* ignore */
+        }
+    }
+    // also try base64-decoding per-line (some subs mix)
+    if (out.length === 0) {
+        text.split(/\r?\n/).forEach((line) => {
+            const s = line.trim();
+            if (isProbablyBase64(s) && s.length > 20) {
+                try {
+                    pushLines(b64DecodeUnicode(s));
+                }
+                catch {
+                    /* ignore */
+                }
+            }
+        });
+    }
+    return out;
+}
+/** Try to fetch a subscription URL directly, then via public CORS relays. */
+async function fetchSubscription(url, timeoutMs = 12000) {
+    if (window.AbinetNative) { const r = await abiCall('fetchSub', { url }); return r.text; }
+    const candidates = [
+        () => fetch(url, { redirect: 'follow' }),
+        () => fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`),
+        () => fetch(`https://corsproxy.io/?url=${encodeURIComponent(url)}`),
+    ];
+    let lastErr = null;
+    for (const go of candidates) {
+        try {
+            const ctrl = new AbortController();
+            const t = setTimeout(() => ctrl.abort(), timeoutMs);
+            const res = await go().finally(() => clearTimeout(t));
+            if (res.ok) {
+                const text = await res.text();
+                if (text && text.length > 4)
+                    return text;
+            }
+        }
+        catch (e) {
+            lastErr = e;
+        }
+    }
+    throw lastErr || new Error('fetch failed');
+}
+
+
+/* ===== lib/store.ts ===== */
+const LS_KEYS = {
+    subs: 'abinet.subs.v1',
+    configs: 'abinet.configs.v1',
+    theme: 'abinet.theme.v1',
+    sel: 'abinet.selectedSub.v1',
+    motion: 'abinet.motion.v1',
+};
+const DEFAULT_SUB_ID = 'default';
+const DEMO_SUB_ID = 'demo-sub';
+const ALL_SUB_ID = 'all';
+function loadJSON(key, fallback) {
+    try {
+        const raw = localStorage.getItem(key);
+        if (!raw)
+            return fallback;
+        return JSON.parse(raw);
+    }
+    catch {
+        return fallback;
+    }
+}
+function saveJSON(key, value) {
+    try {
+        localStorage.setItem(key, JSON.stringify(value));
+    }
+    catch {
+        /* storage may be unavailable */
+    }
+}
+function wipeAll() {
+    Object.values(LS_KEYS).forEach((k) => localStorage.removeItem(k));
+}
+function loadTheme() {
+    const t = loadJSON(LS_KEYS.theme, null);
+    if (t === 'light' || t === 'dark')
+        return t;
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+}
+/* ---------------- Seed data ---------------- */
+function vmessUri(ps, add, port, id, path = '/stream') {
+    return 'vmess://' + b64EncodeUnicode(JSON.stringify({
+        v: '2', ps, add, port, id, aid: '0', scy: 'auto', net: 'ws', type: 'none', host: 'cdn.abinet.app', path, tls: 'tls', sni: 'dl.google.com',
+    }));
+}
+function seedSubsRaw() {
+    return [
+        { id: DEFAULT_SUB_ID, name: 'پیش‌فرض', builtIn: 'default', updatedAt: Date.now() },
+        { id: DEMO_SUB_ID, name: 'اشتراک نمونه', url: 'https://demo.abinet.app/sub/a1b2c3', builtIn: 'demo', updatedAt: Date.now() },
+    ];
+}
+const mk = (subId, raw, name, protocol, server, port, i) => ({
+    id: randId() + i,
+    raw,
+    name,
+    protocol,
+    server,
+    port,
+    subId,
+    addedAt: Date.now() - i * 60000,
+});
+function makeDemoConfigs(version = 1) {
+    const v = version;
+    const rows = [
+        [`vless://0f1e2d3c-4b5a-6978-8a9b-0c1d2e3f4a5b@ae${v}.demo-node.net:443?security=reality&sni=www.samsung.com&fp=chrome&type=tcp#امارات ${v} | VLESS Reality`, `امارات ${v} | VLESS Reality`, 'vless', `ae${v}.demo-node.net`, '443'],
+        [`trojan://Tr9${v}xPassw@jp${v}.demo-node.net:443?sni=www.yahoo.com#ژاپن ${v} | Trojan TLS`, `ژاپن ${v} | Trojan TLS`, 'trojan', `jp${v}.demo-node.net`, '443'],
+        [vmessUri(`کره‌جنوبی ${v} | VMess WS`, `kr${v}.demo-node.net`, '8443', `a1b2c3d4-e5f6-4a5b-8c9d-${v}e2f3a4b5c6d`), `کره‌جنوبی ${v} | VMess WS`, 'vmess', `kr${v}.demo-node.net`, '8443'],
+        [`hysteria2://Hp${v}k92qsL@it${v}.demo-node.net:1443?sni=www.bing.com&insecure=1#ایتالیا ${v} | Hysteria2`, `ایتالیا ${v} | Hysteria2`, 'hysteria2', `it${v}.demo-node.net`, '1443'],
+        [`tuic://9f8e7d6c:Tuic${v}90p@in${v}.demo-node.net:2087?congestion_control=bbr&alpn=h3#هند ${v} | TUIC v5`, `هند ${v} | TUIC v5`, 'tuic', `in${v}.demo-node.net`, '2087'],
+    ];
+    return rows.map((r, i) => mk(DEMO_SUB_ID, r[0], r[1], r[2], r[3], r[4], i));
+}
+function seedConfigsRaw() {
+    const d = DEFAULT_SUB_ID;
+    const rows = [
+        [`vless://b8a4f6c2-3d1e-4a5f-9c2b-7e8d9f0a1b2c@de2.abinet.app:443?security=reality&sni=dl.google.com&fp=chrome&type=tcp&flow=xtls-rprx-vision#آلمان — VLESS Reality`, 'آلمان — VLESS Reality', 'vless', 'de2.abinet.app', '443'],
+        [vmessUri('هلند — VMess WebSocket', 'nl1.abinet.app', '8443', 'c1d2e3f4-5a6b-4c8d-9e0f-1a2b3c4d5e6f'), 'هلند — VMess WebSocket', 'vmess', 'nl1.abinet.app', '8443'],
+        [`trojan://Kf29xQ73Lm@uk3.abinet.app:443?sni=cdn.fastly.net#انگلیس — Trojan TLS`, 'انگلیس — Trojan TLS', 'trojan', 'uk3.abinet.app', '443'],
+        [`ss://YWVzLTI1Ni1nY206U0RmOTFrQnNEdDdMMnFA@fi1.abinet.app:8388#فنلاند — Shadowsocks`, 'فنلاند — Shadowsocks', 'ss', 'fi1.abinet.app', '8388'],
+        [`hysteria2://mh47Kp2qZs@sg2.abinet.app:1443?sni=www.bing.com&insecure=1#سنگاپور — Hysteria2`, 'سنگاپور — Hysteria2', 'hysteria2', 'sg2.abinet.app', '1443'],
+        [`tuic://9f0b1c2d:TuicPass88@tr1.abinet.app:2087?congestion_control=bbr&alpn=h3#ترکیه — TUIC v5`, 'ترکیه — TUIC v5', 'tuic', 'tr1.abinet.app', '2087'],
+        [`vless://7c3a9e51-2b4d-4f6a-8c1e-0d2f3a4b5c6d@us4.abinet.app:2096?security=tls&type=grpc&serviceName=raygrp&sni=www.microsoft.com#آمریکا — VLESS gRPC`, 'آمریکا — VLESS gRPC', 'vless', 'us4.abinet.app', '2096'],
+        [`wireguard://KBnV2p+seedKEYx0abcDEF@fr2.abinet.app:51820?address=10.7.0.2/32&reserved=1,2,3#فرانسه — WireGuard`, 'فرانسه — WireGuard', 'wireguard', 'fr2.abinet.app', '51820'],
+        [`ss://YWVzLTEyOC1jdHI6bXlwYXNzd29yZA@ca1.abinet.app:443#کانادا — Shadowsocks AEAD`, 'کانادا — Shadowsocks AEAD', 'ss', 'ca1.abinet.app', '443'],
+    ];
+    const base = rows.map((r, i) => mk(d, r[0], r[1], r[2], r[3], r[4], i));
+    return [...base, ...makeDemoConfigs(1)];
+}
+function seedSubs() { const s = seedSubsRaw(); return window.AbinetNative ? s.filter((x) => x.builtIn === 'default') : s; }
+function seedConfigs() { return window.AbinetNative ? [] : seedConfigsRaw(); }
+function initialSubs() {
+    const subs = loadJSON(LS_KEYS.subs, []);
+    if (!subs.length)
+        return seedSubs();
+    // guarantee the default group always exists and stays first
+    const def = subs.find((s) => s.builtIn === 'default');
+    const rest = subs.filter((s) => s.builtIn !== 'default');
+    return def ? [def, ...rest] : [{ id: DEFAULT_SUB_ID, name: 'پیش‌فرض', builtIn: 'default', updatedAt: Date.now() }, ...rest];
+}
+function initialConfigs() {
+    const cfgs = loadJSON(LS_KEYS.configs, []);
+    return cfgs.length ? cfgs : seedConfigs();
+}
+const persistSubs = (s) => saveJSON(LS_KEYS.subs, s);
+const persistConfigs = (c) => saveJSON(LS_KEYS.configs, c);
+const persistTheme = (t) => saveJSON(LS_KEYS.theme, t);
+const persistSel = (s) => saveJSON(LS_KEYS.sel, s);
+const loadSel = () => loadJSON(LS_KEYS.sel, ALL_SUB_ID);
+const loadMotion = () => loadJSON(LS_KEYS.motion, true);
+const persistMotion = (v) => saveJSON(LS_KEYS.motion, v);
+
+
+/* ===== core/VpnCore.ts ===== */
+/* ---------------- پیاده‌سازی شبیه‌ساز (نسخه وب / توسعه) ---------------- */
+class SimulatedCore {
+    constructor() {
+        this.id = 'sim';
+        this.label = 'شبیه‌ساز وب';
+        this.isRealTunnel = false;
+        this.timer = null;
+        this.dl = 40;
+    }
+    async testDelay(cfg) {
+        // در هسته واقعی: urltest پروتکل‌محور (TCP/HTTP به مقصد از مسیر پروکسی)
+        await sleep(180 + Math.random() * 480);
+        return testLatency(cfg);
+    }
+    async start(cfg) {
+        // در هسته واقعی: ساخت JSON کانفیگ Xray + اجرای TUN از طریق VpnService
+        const ping = typeof cfg.ping === 'number' && cfg.ping > 0 ? cfg.ping : 120;
+        this.dl = speedFromPing(ping);
+        this.stateCb?.('connected');
+        this.statsCb?.({ download: this.dl, upload: Math.round(this.dl * 0.22 * 10) / 10 });
+        this.timer = setInterval(() => {
+            this.dl = Math.max(this.dl * 0.5 + 1, Math.min(this.dl * 1.6, this.dl + (Math.random() * 2 - 1) * this.dl * 0.09));
+            const download = Math.round(this.dl * 10) / 10;
+            const upload = Math.max(0.4, Math.round(download * (0.16 + Math.random() * 0.16) * 10) / 10);
+            this.statsCb?.({ download, upload });
+        }, 900);
+    }
+    async stop() {
+        if (this.timer) {
+            clearInterval(this.timer);
+            this.timer = null;
+        }
+        this.stateCb?.('disconnected');
+    }
+    onState(cb) {
+        this.stateCb = cb;
+    }
+    onStats(cb) {
+        this.statsCb = cb;
+    }
+}
+/*
+ * نمونه اسکلت پیاده‌سازی واقعی برای اندروید (Capacitor):
+ *
+ *   import { registerPlugin } from '@capacitor/core';
+ *   const XrayVpn = registerPlugin<any>('XrayVpn');
+ *
+ *   class XrayCapacitorCore implements VpnCore {
+ *     isRealTunnel = true;
+ *     async testDelay(cfg) { return XrayVpn.testDelay({ uri: cfg.raw }); }
+ *     async start(cfg)     { await XrayVpn.start({ uri: cfg.raw }); }
+ *     async stop()         { await XrayVpn.stop(); }
+ *     onState(cb) { XrayVpn.addListener('state', (e) => cb(e.state)); }
+ *     onStats(cb) { XrayVpn.addListener('stats', (e) => cb(e)); }
+ *   }
+ */
+const BLU_DEFAULTS = {"pref_mode": "VPN", "pref_vpn_dns": "1.1.1.1", "pref_vpn_mtu": "1500", "pref_socks_port": "10808", "pref_remote_dns": "https://cloudflare-dns.com/dns-query", "pref_domestic_dns": "223.5.5.5", "pref_delay_test_url": "https://www.gstatic.com/generate_204", "pref_ip_api_url": "https://api.ip.sb/geoip", "pref_hev_tunnel_rw_timeout_v2": "300,60", "pref_mux_concurrency": "8", "pref_mux_xudp_concurrency": "8", "pref_fragment_length": "50-100", "pref_fragment_interval": "10-20", "pref_fragment_maxsplit": "10", "pref_observatory_least_ping_interval": "3m", "pref_observatory_least_load_interval": "5m", "pref_observatory_least_load_method": "HEAD", "pref_observatory_least_load_sampling": "2", "pref_observatory_least_load_timeout": "30s", "pref_speed_enabled": true, "pref_confirm_remove": true, "pref_routing_ruleset": "[{\"enabled\":true,\"id\":\"6a7a89fc-3e3d-4252-8741-b53e763e8f50\",\"locked\":false,\"network\":\"udp\",\"outboundTag\":\"block\",\"port\":\"443\",\"remarks\":\"Block udp443\"},{\"enabled\":true,\"id\":\"7fc510f0-b711-4b6d-a168-3d59675915fb\",\"ip\":[\"geoip:private\"],\"locked\":false,\"outboundTag\":\"direct\",\"remarks\":\"Direct LAN IP\"},{\"domain\":[\"geosite:private\"],\"enabled\":true,\"id\":\"31af8b79-4042-403a-bec2-a146963944ed\",\"locked\":false,\"outboundTag\":\"direct\",\"remarks\":\"Direct LAN domains\"},{\"domain\":[\"domain:ir\",\"geosite:category-ir\"],\"enabled\":true,\"id\":\"9264344e-3133-4e1b-9081-35cd6f38dc84\",\"locked\":false,\"outboundTag\":\"direct\",\"remarks\":\"Bypass Iran domains\"},{\"enabled\":true,\"id\":\"b581422e-e86c-43be-aa2e-5d6cfd8c6937\",\"ip\":[\"geoip:ir\"],\"locked\":false,\"outboundTag\":\"direct\",\"remarks\":\"Bypass Iran IP\"}]", "pref_geo_files_sources": "Chocolate4U/Iran-v2ray-rules"};
+const MAIN_SETTINGS = [{"id": "ui", "title": "اعلان", "items": [{"key": "pref_speed_enabled", "type": "switch", "title": "نمایش سرعت دانلود/آپلود در اعلان", "summary": "با کشیدن پرده‌ی اعلان‌ها دیده می‌شود", "default": true}]}, {"id": "vpn", "title": "تنظیمات VPN", "items": [{"key": "pref_ipv6_enabled", "type": "switch", "title": "فعال‌سازی IPv6", "summary": "", "default": false}, {"key": "pref_prefer_ipv6", "type": "switch", "title": "ترجیح IPv6", "summary": "", "default": false}, {"key": "pref_local_dns_enabled", "type": "switch", "title": "DNS محلی", "summary": "", "default": false}, {"key": "pref_fake_dns_enabled", "type": "switch", "title": "FakeDNS", "summary": "", "default": false}, {"key": "pref_vpn_dns", "type": "edit", "title": "DNS برای VPN", "summary": "خالی = پیش‌فرض (1.1.1.1)", "default": "1.1.1.1", "placeholder": "1.1.1.1", "kind": "text"}, {"key": "pref_append_http_proxy", "type": "switch", "title": "افزودن پراکسی HTTP به VPN", "summary": "", "default": false}, {"key": "pref_vpn_bypass_lan", "type": "list", "title": "عبور شبکه محلی (LAN)", "summary": "", "default": "1", "options": [["0", "طبق کانفیگ"], ["1", "Bypass"], ["2", "Not Bypass"]]}, {"key": "pref_vpn_interface_address_config_index", "type": "list", "title": "آدرس اینترفیس VPN", "summary": "", "default": "0", "options": [["0", "10.10.14.x"], ["1", "10.1.0.x"], ["2", "10.0.0.x"], ["3", "172.31.0.x"], ["4", "172.20.0.x"], ["5", "172.16.0.x"], ["6", "192.168.100.x"]]}, {"key": "pref_vpn_mtu", "type": "edit", "title": "MTU", "summary": "خالی = پیش‌فرض", "default": "1500", "placeholder": "1500", "kind": "number"}, {"key": "pref_use_hev_tunnel_v2", "type": "switch", "title": "استفاده از hev-socks5-tunnel", "summary": "تونل TUN پیش‌فرض", "default": true}, {"key": "pref_hev_tunnel_loglevel", "type": "list", "title": "سطح لاگ hev tunnel", "summary": "", "default": "warn", "options": [["error", "error"], ["warn", "warn"], ["info", "info"], ["debug", "debug"]]}, {"key": "pref_hev_tunnel_rw_timeout_v2", "type": "edit", "title": "تایم‌اوت خواندن/نوشتن hev", "summary": "", "default": "300,60", "placeholder": "", "kind": "number"}]}, {"id": "core", "title": "تنظیمات هسته", "items": [{"key": "pref_sniffing_enabled", "type": "switch", "title": "Sniffing", "summary": "", "default": true}, {"key": "pref_route_only_enabled", "type": "switch", "title": "Route only", "summary": "", "default": false}, {"key": "pref_enable_local_proxy", "type": "switch", "title": "پراکسی محلی (SOCKS)", "summary": "", "default": true}, {"key": "pref_proxy_sharing_enabled", "type": "switch", "title": "اشتراک‌گذاری پراکسی در شبکه", "summary": "", "default": false}, {"key": "pref_dynamic_socks_port", "type": "switch", "title": "پورت SOCKS پویا", "summary": "", "default": false}, {"key": "pref_socks_port", "type": "edit", "title": "پورت SOCKS", "summary": "خالی = پیش‌فرض", "default": "10808", "placeholder": "10808", "kind": "number"}, {"key": "pref_socks_username", "type": "edit", "title": "نام‌کاربری SOCKS", "summary": "", "default": "", "placeholder": "", "kind": "text"}, {"key": "pref_socks_password", "type": "edit", "title": "رمز SOCKS", "summary": "", "default": "", "placeholder": "", "kind": "password"}, {"key": "pref_socks_enable_udp", "type": "switch", "title": "UDP روی SOCKS", "summary": "", "default": true}, {"key": "pref_remote_dns", "type": "edit", "title": "DNS راه‌دور", "summary": "خالی = پیش‌فرض", "default": "https://cloudflare-dns.com/dns-query", "placeholder": "https://cloudflare-dns.com/dns-query", "kind": "text"}, {"key": "pref_domestic_dns", "type": "edit", "title": "DNS داخلی", "summary": "خالی = پیش‌فرض", "default": "223.5.5.5", "placeholder": "223.5.5.5", "kind": "text"}, {"key": "pref_dns_hosts", "type": "edit", "title": "DNS Hosts", "summary": "", "default": "", "placeholder": "domain:ip,domain:ip", "kind": "text"}, {"key": "pref_core_loglevel", "type": "list", "title": "سطح لاگ هسته", "summary": "", "default": "warning", "options": [["debug", "debug"], ["info", "info"], ["warning", "warning"], ["error", "error"], ["none", "none"]]}, {"key": "pref_outbound_domain_resolve_method", "type": "list", "title": "حل دامنه‌ی Outbound", "summary": "", "default": "1", "options": [["0", "حل نشود"], ["1", "حل و افزودن به DNS Hosts"], ["2", "حل و جایگزینی دامنه"]]}]}, {"id": "mux", "title": "تنظیمات Mux", "items": [{"key": "pref_mux_enabled", "type": "switch", "title": "فعال‌سازی Mux", "summary": "", "default": false}, {"key": "pref_mux_concurrency", "type": "edit", "title": "Concurrency", "summary": "", "default": "8", "placeholder": "8", "kind": "number"}, {"key": "pref_mux_xudp_concurrency", "type": "edit", "title": "XUDP Concurrency", "summary": "", "default": "8", "placeholder": "8", "kind": "number"}, {"key": "pref_mux_xudp_quic", "type": "list", "title": "XUDP QUIC", "summary": "", "default": "reject", "options": [["reject", "reject"], ["allow", "allow"], ["skip", "skip"]]}]}, {"id": "fragment", "title": "تنظیمات Fragment", "items": [{"key": "pref_fragment_enabled", "type": "switch", "title": "فعال‌سازی Fragment", "summary": "برای دور زدن فیلترینگ TLS", "default": false}, {"key": "pref_fragment_packets", "type": "list", "title": "Packets", "summary": "", "default": "tlshello", "options": [["tlshello", "tlshello"], ["1-1", "1-1"], ["1-2", "1-2"], ["1-3", "1-3"], ["1-5", "1-5"]]}, {"key": "pref_fragment_length", "type": "edit", "title": "Length", "summary": "", "default": "50-100", "placeholder": "50-100", "kind": "text"}, {"key": "pref_fragment_interval", "type": "edit", "title": "Interval", "summary": "", "default": "10-20", "placeholder": "10-20", "kind": "text"}, {"key": "pref_fragment_maxsplit", "type": "edit", "title": "MaxSplit", "summary": "", "default": "10", "placeholder": "10", "kind": "text"}]}, {"id": "observatory", "title": "تنظیمات Observatory (Balancer)", "items": [{"key": "pref_observatory_least_ping_interval", "type": "edit", "title": "Least Ping Interval", "summary": "", "default": "3m", "placeholder": "3m", "kind": "text"}, {"key": "pref_observatory_least_load_interval", "type": "edit", "title": "Least Load Interval", "summary": "", "default": "5m", "placeholder": "5m", "kind": "text"}, {"key": "pref_observatory_least_load_method", "type": "list", "title": "Least Load Method", "summary": "", "default": "HEAD", "options": [["HEAD", "HEAD"], ["GET", "GET"]]}, {"key": "pref_observatory_least_load_sampling", "type": "edit", "title": "Least Load Sampling", "summary": "", "default": "2", "placeholder": "2", "kind": "number"}, {"key": "pref_observatory_least_load_timeout", "type": "edit", "title": "Least Load Timeout", "summary": "", "default": "30s", "placeholder": "30s", "kind": "text"}]}, {"id": "advanced", "title": "تنظیمات پیشرفته", "items": [{"key": "pref_is_booted", "type": "switch", "title": "اجرا هنگام روشن شدن گوشی", "summary": "", "default": false}, {"key": "pref_delay_test_url", "type": "edit", "title": "آدرس تست تاخیر", "summary": "خالی = پیش‌فرض", "default": "https://www.gstatic.com/generate_204", "placeholder": "https://www.gstatic.com/generate_204", "kind": "text"}, {"key": "pref_real_ping_concurrency", "type": "edit", "title": "تعداد همزمان پینگ واقعی", "summary": "", "default": "16", "placeholder": "16", "kind": "number"}, {"key": "pref_ip_api_url", "type": "edit", "title": "آدرس API تشخیص IP/کشور", "summary": "خالی = پیش‌فرض", "default": "https://api.ip.sb/geoip", "placeholder": "https://api.ip.sb/geoip", "kind": "text"}, {"key": "pref_geo_files_sources", "type": "edit", "title": "منبع فایل‌های جغرافیایی (Geo)", "summary": "", "default": "Chocolate4U/Iran-v2ray-rules", "placeholder": "user/repo", "kind": "text"}, {"key": "pref_routing_ruleset", "type": "json", "title": "قوانین مسیریابی (JSON)", "summary": "ایران مستقیم، بلاک UDP 443 و ...", "default": "[{\"enabled\":true,\"id\":\"6a7a89fc-3e3d-4252-8741-b53e763e8f50\",\"locked\":false,\"network\":\"udp\",\"outboundTag\":\"block\",\"port\":\"443\",\"remarks\":\"Block udp443\"},{\"enabled\":true,\"id\":\"7fc510f0-b711-4b6d-a168-3d59675915fb\",\"ip\":[\"geoip:private\"],\"locked\":false,\"outboundTag\":\"direct\",\"remarks\":\"Direct LAN IP\"},{\"domain\":[\"geosite:private\"],\"enabled\":true,\"id\":\"31af8b79-4042-403a-bec2-a146963944ed\",\"locked\":false,\"outboundTag\":\"direct\",\"remarks\":\"Direct LAN domains\"},{\"domain\":[\"domain:ir\",\"geosite:category-ir\"],\"enabled\":true,\"id\":\"9264344e-3133-4e1b-9081-35cd6f38dc84\",\"locked\":false,\"outboundTag\":\"direct\",\"remarks\":\"Bypass Iran domains\"},{\"enabled\":true,\"id\":\"b581422e-e86c-43be-aa2e-5d6cfd8c6937\",\"ip\":[\"geoip:ir\"],\"locked\":false,\"outboundTag\":\"direct\",\"remarks\":\"Bypass Iran IP\"}]", "placeholder": "[ ... ]", "kind": "text"}]}, {"id": "mode", "title": "حالت اجرا", "items": [{"key": "pref_mode", "type": "list", "title": "حالت", "summary": "", "default": "VPN", "options": [["VPN", "VPN (کل دستگاه)"], ["Proxy only", "فقط پراکسی"]]}, {"key": "pref_root_mode_enabled", "type": "switch", "title": "حالت Root", "summary": "فقط روی دستگاه روت‌شده", "default": false}, {"key": "pref_root_lan_sharing", "type": "switch", "title": "اشتراک LAN (Root)", "summary": "", "default": false}]}];
+(function () {
+    const adv = MAIN_SETTINGS.find((g) => g.id === 'advanced');
+    const moved = adv.items.filter((i) => i.key === 'pref_routing_ruleset' || i.key === 'pref_geo_files_sources');
+    adv.items = adv.items.filter((i) => !moved.includes(i));
+    moved.unshift({ key: 'pref_routing_domain_strategy', type: 'list', title: 'استراتژی دامنه (Domain Strategy)', summary: '', default: 'AsIs', options: [['AsIs', 'AsIs'], ['IPIfNonMatch', 'IPIfNonMatch'], ['IPOnDemand', 'IPOnDemand']] });
+    const vpn = MAIN_SETTINGS.find((g) => g.id === 'vpn');
+    const di = vpn.items.findIndex((i) => i.key === 'pref_local_dns_enabled');
+    vpn.items.splice(di + 1, 0, { key: 'pref_local_dns_port', type: 'edit', title: 'پورت DNS محلی', summary: 'خالی = پیش‌فرض (10853)', default: '', placeholder: '10853', kind: 'number' });
+    MAIN_SETTINGS.splice(MAIN_SETTINGS.indexOf(adv), 0, { id: 'routing', title: 'مسیریابی و فایل‌های Geo', items: moved });
+})();
+const mainDefaults = () => Object.fromEntries(MAIN_SETTINGS.flatMap((g) => g.items.map((i) => [i.key, i.default])));
+
+/* ===== اطلاعات IP و کشور ===== */
+const COUNTRIES = [
+ ['DE','آلمان','Germany'],['NL','هلند','Netherlands'],['GB','انگلیس','United Kingdom|UK|Britain|بریتانیا'],['US','آمریکا','United States|USA|America'],
+ ['FI','فنلاند','Finland'],['SG','سنگاپور','Singapore'],['TR','ترکیه','Turkey|Türkiye'],['FR','فرانسه','France'],['CA','کانادا','Canada'],
+ ['JP','ژاپن','Japan'],['AE','امارات','UAE|United Arab Emirates'],['SE','سوئد','Sweden'],['IR','ایران','Iran'],['RU','روسیه','Russia'],
+ ['IN','هند','India'],['AU','استرالیا','Australia'],['IT','ایتالیا','Italy'],['ES','اسپانیا','Spain'],['CH','سوئیس','Switzerland'],
+ ['PL','لهستان','Poland'],['KR','کره جنوبی','Korea'],['HK','هنگ‌کنگ','Hong Kong|هنگ کنگ'],['TW','تایوان','Taiwan'],['AM','ارمنستان','Armenia'],
+ ['KZ','قزاقستان','Kazakhstan'],['UA','اوکراین','Ukraine'],['RO','رومانی','Romania'],['BG','بلغارستان','Bulgaria'],['IE','ایرلند','Ireland'],
+ ['NO','نروژ','Norway'],['DK','دانمارک','Denmark'],['AT','اتریش','Austria'],['BE','بلژیک','Belgium'],['CZ','چک','Czech'],
+ ['LT','لیتوانی','Lithuania'],['LV','لتونی','Latvia'],['EE','استونی','Estonia'],['HU','مجارستان','Hungary'],['PT','پرتغال','Portugal'],
+ ['GR','یونان','Greece'],['IQ','عراق','Iraq'],['SA','عربستان','Saudi'],['QA','قطر','Qatar'],['BH','بحرین','Bahrain'],['KW','کویت','Kuwait'],
+ ['OM','عمان','Oman'],['BR','برزیل','Brazil'],['MX','مکزیک','Mexico'],['ZA','آفریقای جنوبی','South Africa'],['MY','مالزی','Malaysia'],
+ ['ID','اندونزی','Indonesia'],['TH','تایلند','Thailand'],['VN','ویتنام','Vietnam'],['IL','اسرائیل','Israel'],['GE','گرجستان','Georgia'],
+ ['AZ','آذربایجان','Azerbaijan'],['BY','بلاروس','Belarus'],['MD','مولداوی','Moldova'],['RS','صربستان','Serbia'],['LU','لوکزامبورگ','Luxembourg'],
+];
+const ccName = (cc) => (COUNTRIES.find((c) => c[0] === cc) || [])[1] || cc;
+const ccFlag = (cc) => cc && cc.length === 2 ? String.fromCodePoint(...[...cc.toUpperCase()].map((ch) => 127397 + ch.charCodeAt(0))) : '';
+function countryFromText(text) {
+    if (!text) return null;
+    const s = String(text);
+    const fl = s.match(/[\u{1F1E6}-\u{1F1FF}]{2}/u);
+    if (fl) { const cc = [...fl[0]].map((ch) => String.fromCharCode(ch.codePointAt(0) - 127397)).join(''); if (COUNTRIES.some((c) => c[0] === cc)) return cc; }
+    for (const [cc, fa_, en] of COUNTRIES) {
+        if (s.includes(fa_)) return cc;
+        if (en.split('|').some((n) => new RegExp('(^|[^A-Za-z])' + n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^A-Za-z]|$)', 'i').test(s))) return cc;
+    }
+    const m = s.match(/(?:^|[^A-Za-z])([A-Z]{2})(?:[^A-Za-z]|$)/g);
+    if (m) for (const x of m) { const cc = x.replace(/[^A-Z]/g, ''); if (COUNTRIES.some((c) => c[0] === cc)) return cc; }
+    return null;
+}
+const isIpLiteral = (h) => /^\d{1,3}(\.\d{1,3}){3}$/.test(h || '') || (/^[0-9a-fA-F:]+$/.test(h || '') && (h || '').includes(':'));
+/** IP/کشوری که خودِ کانفیگ مشخص کرده (آدرس سرور اگر IP باشد، کشور از نام/پرچم) */
+function declaredInfo(cfg) {
+    return { ip: isIpLiteral(cfg.server) ? cfg.server : '', country: countryFromText(cfg.name) || '' };
+}
+function NetInfo({ conn }) {
+    if (!window.AbinetNative && conn.ip) return React.createElement("div", { className: "shrink-0 text-end" }, React.createElement("p", { className: "text-[9px] font-bold text-slate-400" }, "IP"), React.createElement("p", { dir: "ltr", className: "num text-[11px] font-black text-cyan-600" }, conn.ip));
+    const d = conn.declared || {};
+    let ip = d.ip, cc = d.country, cname = '', state = '';
+    if (!ip && !cc) {
+        if (conn.mIp || conn.mCountry) { ip = conn.mIp; const c2 = countryFromText(conn.mCountry); cc = c2 || ''; cname = c2 ? '' : conn.mCountry; }
+        else state = conn.exitDone ? 'unknown' : 'testing';
+    }
+    const line = (label, value, ltr) => React.createElement("p", { className: "flex items-center justify-end gap-1.5 text-[11px] font-black text-cyan-600 dark:text-cyan-400" },
+        React.createElement("span", { className: "text-[9px] font-bold text-slate-400" }, label), React.createElement("span", { dir: ltr ? 'ltr' : undefined, className: "num" }, value));
+    return React.createElement("div", { className: "shrink-0 text-end" },
+        state === 'testing' && React.createElement("p", { className: "text-[10.5px] font-black text-amber-500" }, "در حال تست…"),
+        state === 'unknown' && React.createElement("p", { className: "text-[11px] font-black text-slate-400" }, "نامشخص"),
+        !state && ip && line("IP", ip, true),
+        !state && (cc || cname) && line("کشور", cc ? `${ccFlag(cc)} ${ccName(cc)}` : cname, false));
+}
+
+/* ===== NativeCore: پل به هسته‌ی واقعی (Xray داخل v2rayNG) ===== */
+const __abiPending = new Map(); let __abiSeq = 0; const __abiL = {};
+window.__abiRes = (id, ok, data) => { const p = __abiPending.get(id); if (!p) return; __abiPending.delete(id); ok ? p.res(JSON.parse(data)) : p.rej(new Error(data)); };
+window.__abiEvt = (name, data) => (__abiL[name] || []).forEach((f) => f(JSON.parse(data)));
+const abiOn = (name, cb) => { (__abiL[name] = __abiL[name] || []).push(cb); };
+const abiOff = (name, cb) => { __abiL[name] = (__abiL[name] || []).filter((f) => f !== cb); };
+const abiCall = (method, args = {}) => new Promise((res, rej) => { const id = 'c' + (++__abiSeq); __abiPending.set(id, { res, rej }); window.AbinetNative.call(id, method, JSON.stringify(args)); });
+class NativeCore {
+    constructor() { this.id = 'xray'; this.label = 'Xray'; this.isRealTunnel = true; this.q = []; this.timer = null; abiOn('traffic', (e) => this.statsCb && this.statsCb({ download: e.dl, upload: e.ul })); }
+    testDelay(cfg) { return new Promise((res) => { this.q.push({ cfg, res }); if (!this.timer) this.timer = setTimeout(() => this.flush(), 120); }); }
+    async flush() {
+        const batch = this.q.splice(0); this.timer = null;
+        try { const r = await abiCall('ping', { raws: batch.map((b) => b.cfg.raw) }); batch.forEach((b, i) => b.res(r.pings[i])); }
+        catch (e) { batch.forEach((b) => b.res(-1)); }
+    }
+    async start(cfg) {
+        let off = () => {};
+        const wait = new Promise((res, rej) => {
+            const t = setTimeout(() => { off(); rej(new Error('زمان اتصال تمام شد')); }, 25000);
+            const f = (e) => {
+                if (e.state === 'connected') { clearTimeout(t); off(); res(); }
+                else if (e.state === 'error') { clearTimeout(t); off(); rej(new Error(e.message || 'خطا در اتصال')); }
+            };
+            off = () => abiOff('state', f);
+            abiOn('state', f);
+        });
+        try { await abiCall('start', { raw: cfg.raw }); } catch (e) { off(); throw e; }
+        await wait;
+    }
+    async stop() { try { await abiCall('stop'); } catch (e) { /* ignore */ } }
+    onState(cb) { abiOn('state', (e) => cb(e.state, e.message)); }
+    onStats(cb) { this.statsCb = cb; }
+    onExit(cb) { abiOn('exit', cb); }
+    testCurrent() { return abiCall('testCurrent'); }
+    readClipboard() { return abiCall('readClipboard'); }
+    writeClipboard(text) { return abiCall('writeClipboard', { text }); }
+    scanQr() { return abiCall('scanQr'); }
+}
+const vpnCore = window.AbinetNative ? new NativeCore() : new SimulatedCore();
+
+
+/* ===== components/ui.tsx ===== */
+const inputCls = 'w-full rounded-xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/5 px-3.5 py-2.5 text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/25';
+const btnPrimary = 'inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition active:scale-[.97] disabled:opacity-50 disabled:pointer-events-none';
+const btnGhost = 'inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/5 px-4 py-2.5 text-sm font-bold text-slate-700 dark:text-slate-200 transition active:scale-[.97] disabled:opacity-50 disabled:pointer-events-none';
+function Sheet({ onClose, title, icon: Icon, children, }) {
+    return (React.createElement("div", { className: "absolute inset-0 z-[60]", role: "dialog", "aria-modal": true },
+        React.createElement("div", { className: "absolute inset-0 bg-slate-950/60", onClick: onClose }),
+        React.createElement("div", { className: "animate-fade-up absolute inset-x-0 bottom-0 rounded-t-[2rem] border-t border-white/50 dark:border-white/10 bg-white/95 dark:bg-[#0a1123]/95 p-5 pb-8 shadow-2xl max-h-[88%] overflow-y-auto no-scrollbar" },
+            React.createElement("div", { className: "mx-auto mb-4 h-1.5 w-12 rounded-full bg-slate-300 dark:bg-slate-700" }),
+            React.createElement("div", { className: "mb-4 flex items-center gap-3" },
+                Icon && (React.createElement("span", { className: "grid size-10 place-items-center rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/30" },
+                    React.createElement(Icon, { size: 18 }))),
+                React.createElement("h2", { className: "flex-1 text-base font-extrabold text-slate-800 dark:text-slate-100" }, title),
+                React.createElement("button", { onClick: onClose, className: "grid size-9 place-items-center rounded-xl bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400 transition active:scale-90", "aria-label": "\u0628\u0633\u062A\u0646" },
+                    React.createElement(X, { size: 17 }))),
+            children)));
+}
+function IconBtn({ icon: Icon, onClick, label, active, disabled, spinning, danger, }) {
+    return (React.createElement("button", { onClick: onClick, disabled: disabled, "aria-label": label, title: label, className: cn('grid size-9 shrink-0 place-items-center rounded-xl border transition active:scale-90 disabled:opacity-40 disabled:pointer-events-none', danger
+            ? 'border-rose-200 dark:border-rose-500/20 bg-rose-50 dark:bg-rose-500/10 text-rose-500 dark:text-rose-400'
+            : active
+                ? 'border-blue-300 dark:border-blue-500/40 bg-blue-600/10 text-blue-600 dark:text-blue-400'
+                : 'border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5 text-slate-500 dark:text-slate-400') },
+        React.createElement(Icon, { size: 16, className: spinning ? 'animate-spin' : undefined })));
+}
+function Toggle({ checked, onChange }) {
+    return (React.createElement("button", { onClick: () => onChange(!checked), "aria-pressed": checked, className: cn('relative h-7 w-12 shrink-0 rounded-full transition-colors duration-300', checked ? 'bg-gradient-to-l from-blue-600 to-indigo-500 shadow-md shadow-blue-600/30' : 'bg-slate-300 dark:bg-slate-700') },
+        React.createElement("span", { className: cn('absolute top-1 size-5 rounded-full bg-white shadow transition-all duration-300', checked ? 'start-6' : 'start-1') })));
+}
+function EmptyState({ icon: Icon, title, desc, children, }) {
+    return (React.createElement("div", { className: "animate-fade-up flex flex-col items-center gap-2 px-6 py-16 text-center" },
+        React.createElement("span", { className: "mb-1 grid size-16 place-items-center rounded-3xl bg-blue-600/10 text-blue-500 dark:text-blue-400" },
+            React.createElement(Icon, { size: 28 })),
+        React.createElement("p", { className: "text-base font-extrabold text-slate-700 dark:text-slate-200" }, title),
+        desc && React.createElement("p", { className: "max-w-64 text-xs leading-6 text-slate-400 dark:text-slate-500" }, desc),
+        children && React.createElement("div", { className: "mt-3 flex flex-wrap items-center justify-center gap-2" }, children)));
+}
+
+
+/* ===== components/viz.tsx ===== */
+const polar = (cx, cy, r, deg) => {
+    const a = ((deg - 90) * Math.PI) / 180;
+    return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+};
+const arcPath = (cx, cy, r, from, to) => {
+    const [x1, y1] = polar(cx, cy, r, from);
+    const [x2, y2] = polar(cx, cy, r, to);
+    const large = to - from > 180 ? 1 : 0;
+    return `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;
+};
+function SpeedGauge({ value, max = 250 }) {
+    const gid = useId();
+    const pct = Math.max(0, Math.min(1, value / max));
+    const sweep = 270;
+    const from = -135;
+    const to = from + sweep * Math.max(0.012, pct);
+    const [nx, ny] = polar(100, 100, 62, -135 + sweep * pct);
+    const ticks = [0, 0.25, 0.5, 0.75, 1];
+    return (React.createElement("div", { className: "relative mx-auto w-52" },
+        React.createElement("svg", { viewBox: "0 0 200 178", className: "w-full" },
+            React.createElement("defs", null,
+                React.createElement("linearGradient", { id: `${gid}-g`, x1: "0%", y1: "100%", x2: "100%", y2: "0%" },
+                    React.createElement("stop", { offset: "0%", stopColor: "#22d3ee" }),
+                    React.createElement("stop", { offset: "45%", stopColor: "#3b82f6" }),
+                    React.createElement("stop", { offset: "100%", stopColor: "#818cf8" }))),
+            React.createElement("path", { d: arcPath(100, 100, 80, -135, 135), fill: "none", strokeWidth: "13", strokeLinecap: "round", className: "stroke-slate-200 dark:stroke-white/10" }),
+            React.createElement("path", { d: arcPath(100, 100, 80, from, to), fill: "none", stroke: `url(#${gid}-g)`, strokeWidth: "13", strokeLinecap: "round", style: { transition: 'all 90ms linear', filter: 'drop-shadow(0 0 8px rgba(59,130,246,.55))' } }),
+            ticks.map((t) => {
+                const a = -135 + sweep * t;
+                const [x1, y1] = polar(100, 100, 68, a);
+                const [x2, y2] = polar(100, 100, 92, a);
+                return (React.createElement("line", { key: t, x1: x1, y1: y1, x2: x2, y2: y2, className: "stroke-slate-300 dark:stroke-slate-600", strokeWidth: "2.4", strokeLinecap: "round" }));
+            }),
+            React.createElement("line", { x1: 100, y1: 100, x2: nx, y2: ny, className: "stroke-slate-700 dark:stroke-slate-200", strokeWidth: "3.4", strokeLinecap: "round", style: { transition: 'all 90ms linear' } }),
+            React.createElement("circle", { cx: 100, cy: 100, r: 7.5, className: "fill-blue-600" }),
+            React.createElement("circle", { cx: 100, cy: 100, r: 3.4, className: "fill-white" })),
+        React.createElement("div", { className: "absolute inset-x-0 bottom-1 text-center" },
+            React.createElement("span", { className: "num text-3xl font-black text-slate-800 dark:text-white" }, fa(value.toFixed(1), 1)),
+            React.createElement("span", { className: "ms-1 text-[10px] font-bold text-slate-400" }, "Mbps"))));
+}
+function Sparkline({ data, height = 44 }) {
+    const gid = useId();
+    const w = 100;
+    const h = 36;
+    const pts = data.length >= 2 ? data : [0, ...data, 0];
+    const max = Math.max(...pts, 1);
+    const min = Math.min(...pts, 0);
+    const range = max - min || 1;
+    const coords = pts.map((v, i) => [
+        (i / (pts.length - 1)) * w,
+        h - 3.5 - ((v - min) / range) * (h - 7),
+    ]);
+    const line = coords.map(([x, y], i) => `${i ? 'L' : 'M'} ${x.toFixed(1)} ${y.toFixed(1)}`).join(' ');
+    const area = `${line} L ${w} ${h} L 0 ${h} Z`;
+    const [lx, ly] = coords[coords.length - 1];
+    return (React.createElement("svg", { viewBox: `0 0 ${w} ${h}`, preserveAspectRatio: "none", style: { height, width: '100%' } },
+        React.createElement("defs", null,
+            React.createElement("linearGradient", { id: `${gid}-a`, x1: "0", y1: "0", x2: "0", y2: "1" },
+                React.createElement("stop", { offset: "0%", stopColor: "#3b82f6", stopOpacity: ".45" }),
+                React.createElement("stop", { offset: "100%", stopColor: "#3b82f6", stopOpacity: "0" }))),
+        React.createElement("path", { d: area, fill: `url(#${gid}-a)` }),
+        React.createElement("path", { d: line, fill: "none", stroke: "#3b82f6", strokeWidth: "1.8", strokeLinecap: "round", strokeLinejoin: "round", vectorEffect: "non-scaling-stroke" }),
+        React.createElement("circle", { cx: lx, cy: ly, r: "2.4", className: "fill-cyan-400" }),
+        React.createElement("circle", { cx: lx, cy: ly, r: "4.4", className: "fill-cyan-400 opacity-30 animate-blink" })));
+}
+
+
+/* ===== components/ConnectOrb.tsx ===== */
+function ConnectOrb({ status, onPress, motion, progress, }) {
+    const working = status === 'testing' || status === 'connecting';
+    const connected = status === 'connected';
+    const R = 56;
+    const C = 2 * Math.PI * R;
+    return (React.createElement("div", { className: "relative grid size-64 place-items-center select-none" },
+        connected && motion && (React.createElement(React.Fragment, null,
+            React.createElement("span", { className: "ring-pulse absolute inset-2 rounded-full border-2 border-cyan-400/50" }),
+            React.createElement("span", { className: "ring-pulse absolute inset-2 rounded-full border-2 border-blue-500/40", style: { animationDelay: '1s' } }))),
+        React.createElement("span", { className: cn('absolute inset-0 rounded-full border-2 border-dashed', working ? 'border-blue-500/50' : 'border-blue-500/25 dark:border-blue-400/20', motion && (working ? 'animate-spin [animation-duration:5s]' : 'animate-spin-slow')) }),
+        React.createElement("span", { className: cn('absolute inset-3 rounded-full border', connected ? 'border-cyan-400/40' : 'border-blue-400/15 dark:border-blue-300/10', motion && 'animate-spin-slower') }),
+        working && (React.createElement("svg", { viewBox: "0 0 128 128", className: "absolute inset-0 size-full -rotate-90" },
+            React.createElement("circle", { cx: "64", cy: "64", r: R, fill: "none", strokeWidth: "2.6", className: "stroke-blue-500/15" }),
+            React.createElement("circle", { cx: "64", cy: "64", r: R, fill: "none", strokeWidth: "2.6", strokeLinecap: "round", className: "stroke-cyan-400", strokeDasharray: C, strokeDashoffset: C * (1 - (progress ?? 0)), style: { transition: 'stroke-dashoffset .35s ease, opacity .3s', filter: 'drop-shadow(0 0 5px rgba(34,211,238,.7))' } }))),
+        working && motion && (React.createElement("span", { className: "animate-orbit absolute size-3.5" },
+            React.createElement("span", { className: "block size-3.5 rounded-full bg-cyan-400 shadow-[0_0_14px_4px_rgba(34,211,238,.7)]" }))),
+        React.createElement("button", { onClick: onPress, "aria-label": connected ? 'قطع اتصال' : 'اتصال', className: cn('relative z-10 grid size-44 cursor-pointer place-items-center rounded-full text-white transition-transform duration-200 active:scale-95', connected
+                ? 'bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-600'
+                : 'bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700', motion && (connected ? 'animate-breathe' : working ? 'animate-breathe' : 'shadow-[0_18px_50px_-8px_rgba(37,99,235,.55)]')), style: !motion
+                ? { boxShadow: '0 0 60px 4px rgba(59,130,246,.4)' }
+                : working
+                    ? { animationDuration: '1.6s' }
+                    : undefined },
+            React.createElement("span", { className: "pointer-events-none absolute inset-0 rounded-full bg-[radial-gradient(circle_at_32%_22%,rgba(255,255,255,.35),transparent_55%)]" }),
+            React.createElement("span", { className: "pointer-events-none absolute inset-2 rounded-full border border-white/20" }),
+            React.createElement(Power, { size: 62, strokeWidth: 2.2, className: cn('drop-shadow-lg transition-all', working && 'animate-blink') }))));
+}
+
+
+/* ===== components/Toasts.tsx ===== */
+const ICONS = {
+    success: CheckCircle2,
+    error: AlertCircle,
+    info: Info,
+};
+const TONES = {
+    success: 'border-emerald-400/40 text-emerald-600 dark:text-emerald-400',
+    error: 'border-rose-400/40 text-rose-600 dark:text-rose-400',
+    info: 'border-blue-400/40 text-blue-600 dark:text-blue-400',
+};
+function ToastStack({ toasts }) {
+    return (React.createElement("div", { className: "pointer-events-none absolute inset-x-0 top-3 z-[90] flex flex-col items-center gap-2 px-5" }, toasts.map((t) => {
+        const Icon = ICONS[t.type];
+        return (React.createElement("div", { key: t.id, className: cn('glass animate-slide-down pointer-events-auto flex w-full max-w-sm items-start gap-2.5 rounded-2xl border px-3.5 py-3 shadow-xl', TONES[t.type]) },
+            React.createElement(Icon, { size: 18, className: "mt-0.5 shrink-0" }),
+            React.createElement("p", { className: "flex-1 text-xs font-bold leading-5 text-slate-700 dark:text-slate-200" }, t.text)));
+    })));
+}
+
+
+/* ===== components/modals.tsx ===== */
+function AddSubSheet({ onClose, onAdd }) {
+    const [name, setName] = useState('');
+    const [url, setUrl] = useState('');
+    const [err, setErr] = useState('');
+    const submit = (e) => {
+        e.preventDefault();
+        const n = name.trim();
+        const u = url.trim();
+        if (!n)
+            return setErr('لطفاً نام اشتراک را وارد کنید.');
+        if (!/^https?:\/\/\S{4,}/i.test(u))
+            return setErr('لینک اشتراک معتبر نیست؛ باید با http یا https شروع شود.');
+        setErr('');
+        onAdd(n, u);
+    };
+    return (React.createElement(Sheet, { onClose: onClose, title: "\u0627\u0641\u0632\u0648\u062F\u0646 \u0627\u0634\u062A\u0631\u0627\u06A9 \u062C\u062F\u06CC\u062F", icon: Rss },
+        React.createElement("form", { onSubmit: submit, className: "flex flex-col gap-3" },
+            React.createElement("div", null,
+                React.createElement("label", { className: "mb-1.5 block text-xs font-bold text-slate-500 dark:text-slate-400" }, "\u0646\u0627\u0645 \u0627\u0634\u062A\u0631\u0627\u06A9"),
+                React.createElement("input", { autoFocus: true, value: name, onChange: (e) => setName(e.target.value), className: inputCls, placeholder: "\u0645\u062B\u0644\u0627\u064B: \u0633\u0631\u0648\u0631\u0647\u0627\u06CC \u0645\u0646" })),
+            React.createElement("div", null,
+                React.createElement("label", { className: "mb-1.5 block text-xs font-bold text-slate-500 dark:text-slate-400" }, "\u0644\u06CC\u0646\u06A9 \u0627\u0634\u062A\u0631\u0627\u06A9"),
+                React.createElement("div", { className: "relative" },
+                    React.createElement("input", { value: url, onChange: (e) => setUrl(e.target.value), className: inputCls + ' ps-9', placeholder: "https://example.com/sub/...", dir: "ltr", inputMode: "url" }),
+                    React.createElement(Link2, { size: 15, className: "absolute start-3 top-1/2 -translate-y-1/2 text-slate-400" }))),
+            err && (React.createElement("p", { className: "flex items-center gap-1.5 text-[11px] font-bold text-rose-500" },
+                React.createElement(TriangleAlert, { size: 13 }),
+                " ",
+                err)),
+            React.createElement("p", { className: "rounded-xl bg-blue-500/5 dark:bg-blue-400/5 px-3 py-2.5 text-[11px] leading-5 text-slate-400 dark:text-slate-500" }, "\u067E\u0633 \u0627\u0632 \u0627\u0641\u0632\u0648\u062F\u0646\u060C \u0627\u0634\u062A\u0631\u0627\u06A9 \u0628\u0647\u200C\u0635\u0648\u0631\u062A \u062E\u0648\u062F\u06A9\u0627\u0631 \u0628\u0647\u200C\u0631\u0648\u0632\u0631\u0633\u0627\u0646\u06CC \u0634\u062F\u0647 \u0648 \u06A9\u0627\u0646\u0641\u06CC\u06AF\u200C\u0647\u0627\u06CC \u0622\u0646 \u062F\u0631\u06CC\u0627\u0641\u062A \u0645\u06CC\u200C\u0634\u0648\u0646\u062F."),
+            React.createElement("div", { className: "mt-1 flex gap-2" },
+                React.createElement("button", { type: "submit", className: btnPrimary + ' flex-1' },
+                    React.createElement(Plus, { size: 16 }),
+                    " \u0627\u0641\u0632\u0648\u062F\u0646 \u0627\u0634\u062A\u0631\u0627\u06A9"),
+                React.createElement("button", { type: "button", onClick: onClose, className: btnGhost }, "\u0627\u0646\u0635\u0631\u0627\u0641")))));
+}
+function AddConfigSheet({ onClose, onAdd, }) {
+    const [text, setText] = useState('');
+    const [err, setErr] = useState('');
+    const submit = (e) => {
+        e.preventDefault();
+        if (!text.trim())
+            return setErr('هیچ متنی وارد نشده است.');
+        const ok = onAdd(text);
+        if (!ok)
+            setErr('کانفیگ معتبری در متن واردشده پیدا نشد.');
+    };
+    return (React.createElement(Sheet, { onClose: onClose, title: "\u0627\u0641\u0632\u0648\u062F\u0646 \u06A9\u0627\u0646\u0641\u06CC\u06AF \u062F\u0633\u062A\u06CC", icon: ClipboardPaste },
+        React.createElement("form", { onSubmit: submit, className: "flex flex-col gap-3" },
+            React.createElement("label", { className: "text-xs font-bold text-slate-500 dark:text-slate-400" }, "\u0644\u06CC\u0646\u06A9 \u06A9\u0627\u0646\u0641\u06CC\u06AF \u2014 \u0647\u0631 \u062E\u0637 \u06CC\u06A9 \u06A9\u0627\u0646\u0641\u06CC\u06AF (vless, vmess, trojan, ss, hysteria2, tuic, \u2026)"),
+            React.createElement("textarea", { autoFocus: true, value: text, onChange: (e) => setText(e.target.value), rows: 5, dir: "ltr", className: inputCls + ' resize-none font-mono text-[11px] leading-5 text-left', placeholder: 'vless://uuid@server:443?...#Name\nvmess://eyJ2IjoiMiIs...' }),
+            err && (React.createElement("p", { className: "flex items-center gap-1.5 text-[11px] font-bold text-rose-500" },
+                React.createElement(TriangleAlert, { size: 13 }),
+                " ",
+                err)),
+            React.createElement("p", { className: "rounded-xl bg-blue-500/5 dark:bg-blue-400/5 px-3 py-2.5 text-[11px] leading-5 text-slate-400 dark:text-slate-500" }, "\u06A9\u0627\u0646\u0641\u06CC\u06AF\u200C\u0647\u0627\u06CC \u0627\u0641\u0632\u0648\u062F\u0647\u200C\u0634\u062F\u0647 \u062F\u0631 \u0627\u0634\u062A\u0631\u0627\u06A9 \u00AB\u067E\u06CC\u0634\u200C\u0641\u0631\u0636\u00BB \u0630\u062E\u06CC\u0631\u0647 \u0645\u06CC\u200C\u0634\u0648\u0646\u062F."),
+            React.createElement("div", { className: "flex gap-2" },
+                React.createElement("button", { type: "submit", className: btnPrimary + ' flex-1' },
+                    React.createElement(Plus, { size: 16 }),
+                    " \u0627\u0641\u0632\u0648\u062F\u0646 \u06A9\u0627\u0646\u0641\u06CC\u06AF\u200C\u0647\u0627"),
+                React.createElement("button", { type: "button", onClick: onClose, className: btnGhost }, "\u0627\u0646\u0635\u0631\u0627\u0641")))));
+}
+const GUIDE_METHODS = [
+    {
+        icon: CloudUpload,
+        title: 'روش ۱ — بدون برنامه‌نویسی (WebView Wrapper)',
+        lines: [
+            'فایل HTML دانلودشده را روی یک هاست HTTPS رایگان آپلود کنید (Netlify، Vercel یا GitHub Pages).',
+            'وارد سرویس‌هایی مثل AppsGeyser، WebIntoApp یا GoNative شوید، لینک را بدهید و خروجی APK بگیرید.',
+            'APK را روی گوشی نصب کنید — رابط کامل برنامه اجرا می‌شود.',
+        ],
+    },
+    {
+        icon: Package,
+        title: 'روش ۲ — PWABuilder (نصب از مرورگر / TWA)',
+        lines: [
+            'پوشه خروجی (شامل index.html، manifest و آیکون) را روی هاست HTTPS قرار دهید.',
+            'به pwabuilder.com بروید، آدرس سایت را وارد کنید و پکیج Android را دانلود کنید.',
+            'یا در کروم موبایل: منوی ⋮ ← «نصب برنامه / Add to Home screen».',
+        ],
+    },
+    {
+        icon: Code2,
+        title: 'روش ۳ — Capacitor (حرفه‌ای، ساخت APK امضاشده)',
+        lines: [],
+        code: [
+            'npm i @capacitor/core @capacitor/cli @capacitor/android',
+            'npx cap init BluNet com.ahj.blunet --web-dir=dist',
+            'npx cap add android',
+            'npm run build && npx cap sync',
+            'npx cap open android   # ‏Build ← Generate Signed APK',
+        ],
+    },
+    {
+        icon: Rocket,
+        title: 'روش ۴ — نسخه واقعی با هسته VPN (تونل حقیقی)',
+        lines: [
+            'برای عبور واقعی ترافیک، باید هسته Xray یا sing-box به‌صورت نیتیو روی پروژه سوار شود؛ WebView تنها رابط کاربری است.',
+            'کتابخانه‌های آماده: AndroidLibXrayLite (همان هسته v2rayNG) یا libbox پروژه sing-box-for-android — هر دو با VpnService اندروید.',
+            'نقطه اتصال از همین حالا در کد آماده است: فایل src/core/VpnCore.ts — پیاده‌سازی واقعی را جای شبیه‌ساز بگذارید، بدون تغییر رابط کاربری.',
+            'مسیر سریع‌تر: سورس‌باز v2rayNG (کاتلین) یا Hiddify-Next (فلاتر) را Fork کنید و ظاهر همین برنامه را روی آن پیاده کنید.',
+        ],
+    },
+];
+function ApkGuideSheet({ onClose }) {
+    return (React.createElement(Sheet, { onClose: onClose, title: "\u0631\u0627\u0647\u0646\u0645\u0627\u06CC \u062A\u0628\u062F\u06CC\u0644 \u0628\u0647 APK", icon: Smartphone },
+        React.createElement("div", { className: "flex flex-col gap-3" },
+            React.createElement("p", { className: "flex items-start gap-2 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-3 text-[11px] leading-6 font-bold text-amber-700 dark:text-amber-300" },
+                React.createElement(ShieldAlert, { size: 16, className: "mt-0.5 shrink-0" }),
+                "\u0646\u06A9\u062A\u0647 \u0645\u0647\u0645: \u0627\u06CC\u0646 \u0646\u0633\u062E\u0647 \u00AB\u0631\u0627\u0628\u0637 \u06A9\u0627\u0631\u0628\u0631\u06CC\u00BB \u0628\u0631\u0646\u0627\u0645\u0647 \u0627\u0633\u062A. \u0645\u0631\u0648\u0631\u06AF\u0631\u0647\u0627 \u0627\u062C\u0627\u0632\u0647 \u0633\u0627\u062E\u062A \u062A\u0648\u0646\u0644 VPN \u0646\u062F\u0627\u0631\u0646\u062F\u061B \u0628\u0631\u0627\u06CC \u0639\u0628\u0648\u0631 \u0648\u0627\u0642\u0639\u06CC \u062A\u0631\u0627\u0641\u06CC\u06A9 \u0628\u0627\u06CC\u062F \u0647\u0633\u062A\u0647 Xray \u06CC\u0627 sing-box (\u0645\u062B\u0644 v2rayNG) \u0628\u0647\u200C\u0635\u0648\u0631\u062A \u0646\u06CC\u062A\u06CC\u0648 \u0628\u0647 \u067E\u0631\u0648\u0698\u0647 \u0627\u0636\u0627\u0641\u0647 \u0634\u0648\u062F."),
+            GUIDE_METHODS.map((m) => (React.createElement("div", { key: m.title, className: "rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/60 dark:bg-white/[.04] p-3.5" },
+                React.createElement("p", { className: "mb-2 flex items-center gap-2 text-[12px] font-extrabold text-slate-700 dark:text-slate-200" },
+                    React.createElement("span", { className: "grid size-8 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-600/25" },
+                        React.createElement(m.icon, { size: 14 })),
+                    m.title),
+                React.createElement("ol", { className: "flex flex-col gap-1.5 pe-1" }, m.lines.map((line, i) => (React.createElement("li", { key: i, className: "flex items-start gap-2 text-[10.5px] leading-5 font-semibold text-slate-500 dark:text-slate-400" },
+                    React.createElement("span", { className: "num mt-0.5 grid size-4 shrink-0 place-items-center rounded-md bg-blue-600/10 text-[9px] font-black text-blue-600 dark:text-blue-400" }, i + 1),
+                    line)))),
+                m.code && (React.createElement("pre", { dir: "ltr", className: "mt-2 overflow-x-auto rounded-xl bg-slate-950 p-3 text-left font-mono text-[10px] leading-5 text-sky-300" }, m.code.join('\n')))))),
+            React.createElement("p", { className: "flex items-start gap-2 rounded-2xl bg-blue-500/5 dark:bg-blue-400/5 p-3 text-[10px] leading-5 font-semibold text-slate-400 dark:text-slate-500" },
+                React.createElement(Info, { size: 13, className: "mt-0.5 shrink-0 text-blue-500" }),
+                "\u0628\u0631\u0627\u06CC \u0633\u0627\u062E\u062A \u0641\u0627\u06CC\u0644 \u0646\u0635\u0627\u0628 \u0646\u06CC\u0627\u0632\u06CC \u0628\u0647 \u062F\u0633\u062A\u06AF\u0627\u0647 \u0646\u062F\u0627\u0631\u06CC\u062F: \u062F\u06A9\u0645\u0647 \u00AB\u062F\u0627\u0646\u0644\u0648\u062F \u0628\u0631\u0646\u0627\u0645\u0647\u00BB \u062F\u0631 \u062A\u0646\u0638\u06CC\u0645\u0627\u062A\u060C \u06A9\u0644 \u0628\u0631\u0646\u0627\u0645\u0647 \u0631\u0627 \u062F\u0631 \u06CC\u06A9 \u0641\u0627\u06CC\u0644 HTML \u0628\u0647 \u0634\u0645\u0627 \u0645\u06CC\u200C\u062F\u0647\u062F \u06A9\u0647 \u0645\u0633\u062A\u0642\u06CC\u0645 \u0631\u0648\u06CC \u0645\u0648\u0628\u0627\u06CC\u0644 \u0647\u0645 \u0627\u062C\u0631\u0627 \u0645\u06CC\u200C\u0634\u0648\u062F."))));
+}
+function ConfirmSheet({ title, desc, confirmLabel, onConfirm, onClose, }) {
+    const [busy, setBusy] = useState(false);
+    return (React.createElement(Sheet, { onClose: onClose, title: title, icon: TriangleAlert },
+        React.createElement("p", { className: "mb-5 text-sm leading-7 text-slate-500 dark:text-slate-400" }, desc),
+        React.createElement("div", { className: "flex gap-2" },
+            React.createElement("button", { onClick: () => {
+                    setBusy(true);
+                    onConfirm();
+                }, className: "inline-flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-rose-600 to-rose-500 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-rose-600/25 transition active:scale-[.97]" },
+                busy ? React.createElement(Loader2, { size: 16, className: "animate-spin" }) : null,
+                confirmLabel),
+            React.createElement("button", { onClick: onClose, className: btnGhost }, "\u0627\u0646\u0635\u0631\u0627\u0641"))));
+}
+
+
+/* ===== tabs/Configs.tsx ===== */
+function ConfigRow({ cfg, index, onDelete, onTestOne, onConnect, active, selected, busy, }) {
+    const meta = protoMeta(cfg.protocol);
+    const tone = pingTone(cfg.ping);
+    return (React.createElement("div", { className: "cfg-row flex items-center gap-2.5 rounded-2xl border border-slate-200/70 dark:border-white/[.07] bg-white/70 dark:bg-white/[.04] p-2.5 transition hover:border-blue-300/70 dark:hover:border-blue-500/30", style: { animationDelay: `${Math.min(index, 14) * 35}ms` } },
+        React.createElement("span", { className: "grid size-11 shrink-0 place-items-center rounded-2xl text-[11px] font-black", style: { background: `${meta.color}1f`, color: meta.color, border: `1px solid ${meta.color}45` } }, meta.abbr),
+        React.createElement("div", { className: "min-w-0 flex-1" },
+            React.createElement("p", { className: "truncate text-[12.5px] font-extrabold text-slate-700 dark:text-slate-200" }, cfg.name, active ? '  ● متصل' : selected ? '  ◦ انتخاب‌شده' : ''),
+            React.createElement("p", { dir: "ltr", className: "num truncate text-start text-[10px] font-semibold text-slate-400 dark:text-slate-500" },
+                cfg.server,
+                ":",
+                cfg.port)),
+        React.createElement("span", { className: cn('num w-16 shrink-0 rounded-lg px-1 py-1 text-center text-[10px] font-black', tone.bg, tone.text) }, tone.label),
+        React.createElement(IconBtn, { icon: Power, label: "اتصال", onClick: onConnect }),
+        React.createElement(IconBtn, { icon: RefreshCw, label: "\u062A\u0633\u062A \u067E\u06CC\u0646\u06AF", onClick: onTestOne, spinning: busy }),
+        React.createElement(IconBtn, { icon: Trash2, label: "\u062D\u0630\u0641", onClick: onDelete, danger: true })));
+}
+function ConfigTile({ cfg, busy, picked, active, multi, checked, onTap, onLong, onTest }) {
+    const meta = protoMeta(cfg.protocol);
+    const tone = pingTone(cfg.ping);
+    const timer = useRef(null);
+    const fired = useRef(false);
+    const down = () => { fired.current = false; timer.current = setTimeout(() => { fired.current = true; if (onLong) onLong(); }, 480); };
+    const up = () => clearTimeout(timer.current);
+    const on = picked || checked;
+    return React.createElement("div", {
+        role: "button", tabIndex: 0,
+        onPointerDown: down, onPointerUp: up, onPointerLeave: up, onPointerCancel: up,
+        onContextMenu: (e) => e.preventDefault(),
+        onClick: () => { if (fired.current) { fired.current = false; return; } onTap(); },
+        className: cn('cfg-row relative flex min-h-[4.9rem] select-none items-center gap-3 rounded-3xl border p-3 text-start transition active:scale-[.99]',
+            on ? 'border-blue-500 bg-blue-600/10 ring-2 ring-blue-500/60' : 'border-slate-200/80 dark:border-white/10 bg-white/80 dark:bg-white/[.05]')
+    },
+        multi && React.createElement("span", { className: cn('grid size-6 shrink-0 place-items-center rounded-full border-2 transition', checked ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-300 dark:border-white/20') }, checked && React.createElement(Check, { size: 13 })),
+        React.createElement("span", { className: "grid size-11 shrink-0 place-items-center rounded-2xl text-[10.5px] font-black", style: { background: `${meta.color}1f`, color: meta.color, border: `1px solid ${meta.color}45` } }, meta.abbr),
+        React.createElement("div", { className: "min-w-0 flex-1" },
+            React.createElement("p", { className: "break-words text-[13px] font-extrabold leading-snug text-slate-800 dark:text-slate-100" }, cfg.name),
+            React.createElement("div", { className: "mt-1 flex flex-wrap items-center gap-x-2 gap-y-1" },
+                React.createElement("span", { dir: "ltr", className: "num max-w-full truncate text-[9.5px] font-semibold text-slate-400 dark:text-slate-500" }, cfg.server, ":", cfg.port),
+                active && React.createElement("span", { className: "rounded-md bg-emerald-500/15 px-1.5 py-0.5 text-[9px] font-black text-emerald-600 dark:text-emerald-400" }, "متصل"),
+                !active && picked && !multi && React.createElement("span", { className: "rounded-md bg-blue-600/15 px-1.5 py-0.5 text-[9px] font-black text-blue-600 dark:text-blue-400" }, "انتخاب‌شده"))),
+        React.createElement("div", { className: "flex shrink-0 flex-col items-center gap-1.5" },
+            React.createElement("span", { className: cn('num min-w-[3.4rem] rounded-lg px-2 py-1 text-center text-[10.5px] font-black', tone.bg, tone.text) }, tone.label),
+            React.createElement("button", { "aria-label": "تست پینگ", onPointerDown: (e) => e.stopPropagation(), onClick: (e) => { e.stopPropagation(); onTest(); },
+                className: "grid size-8 place-items-center rounded-xl border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5 text-slate-500 dark:text-slate-400" },
+                React.createElement(RefreshCw, { size: 14, className: busy ? 'animate-spin' : undefined }))));
+}
+function Configs(p) {
+    const [multi, setMulti] = useState(null);
+    const groups = useMemo(() => {
+        const order = (items) => {
+            const ranked = items.filter((c) => c.rank !== undefined).sort((a, b) => a.rank - b.rank);
+            const fresh = items.filter((c) => c.rank === undefined).reverse();
+            return [...ranked, ...fresh];
+        };
+        if (p.selectedSub !== ALL_SUB_ID) {
+            const sub = p.subs.find((s) => s.id === p.selectedSub);
+            return [{ sub, items: order(p.configs.filter((c) => c.subId === p.selectedSub)) }];
+        }
+        return p.subs.map((sub) => ({ sub, items: order(p.configs.filter((c) => c.subId === sub.id)) })).filter((g) => g.items.length > 0);
+    }, [p.configs, p.subs, p.selectedSub]);
+    const selectedName = p.selectedSub === ALL_SUB_ID ? 'همه اشتراک‌ها' : p.subs.find((s) => s.id === p.selectedSub)?.name ?? '—';
+    const totalShown = groups.reduce((n, g) => n + g.items.length, 0);
+    const allIds = groups.flatMap((g) => g.items.map((c) => c.id));
+    const toggle = (id) => setMulti((prev) => { const n = new Set(prev || []); if (n.has(id)) n.delete(id); else n.add(id); return n; });
+    const applySort = () => {
+        const key = (c) => (c.ping > 0 ? c.ping : c.ping === undefined ? 2000000 : 1000000);
+        const rank = {};
+        groups.forEach((g) => [...g.items].sort((a, b) => key(a) - key(b)).forEach((c, i) => { rank[c.id] = i + 1; }));
+        p.onApplySort(rank);
+    };
+    const mainBtn = 'flex flex-1 items-center justify-center gap-1.5 rounded-xl px-2.5 py-2.5 text-[11.5px] font-extrabold transition active:scale-[.97]';
+    return (React.createElement("div", { className: "thin-scroll h-full overflow-y-auto px-5 pb-28 pt-1" },
+        React.createElement("div", { className: "mb-3 flex items-center gap-2" },
+            React.createElement("h1", { className: "text-lg font-black text-slate-800 dark:text-white" }, "کانفیگ‌ها"),
+            React.createElement("span", { className: "num rounded-lg bg-blue-600/10 px-2 py-0.5 text-[10px] font-black text-blue-600 dark:text-blue-400" }, fa(totalShown))),
+        React.createElement("div", { className: "mb-3 flex items-center gap-2" },
+            React.createElement("button", { onClick: p.onAddClipboard, className: mainBtn + ' bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-600/25' },
+                React.createElement(ClipboardPaste, { size: 15 }), " از کلیپ‌بورد"),
+            React.createElement("button", { onClick: p.onScanQr, className: mainBtn + ' border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5 text-slate-600 dark:text-slate-300' },
+                React.createElement(QrCode, { size: 15 }), " QR"),
+            React.createElement("button", { onClick: p.onAddManual, className: mainBtn + ' border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5 text-slate-600 dark:text-slate-300' },
+                React.createElement(PenLine, { size: 15 }), " دستی")),
+        React.createElement("div", { className: "mb-3 flex items-center gap-2" },
+            React.createElement(IconBtn, { icon: Zap, label: "تست پینگ همه", onClick: p.onTestGroup, spinning: p.groupTesting, disabled: p.connBusy || totalShown === 0, active: p.groupTesting }),
+            React.createElement(IconBtn, { icon: ArrowUpDown, label: "مرتب‌سازی بر اساس پینگ (ماندگار)", onClick: applySort, disabled: totalShown === 0 }),
+            React.createElement(IconBtn, { icon: Copy, label: "کپی لینک‌ها", onClick: () => p.onOpenExport(multi ? [...multi] : []), disabled: totalShown === 0 }),
+            React.createElement(IconBtn, { icon: ListChecks, label: "انتخاب چندتایی", onClick: () => setMulti(multi ? null : new Set()), active: !!multi }),
+            React.createElement("span", { className: "flex-1" }),
+            React.createElement("span", { className: "flex items-center gap-1 text-[10px] font-bold text-slate-400" }, React.createElement(Layers, { size: 11 }), selectedName)),
+        multi && React.createElement("div", { className: "sticky top-0 z-20 mb-3 flex items-center gap-2 rounded-2xl border border-blue-500/30 bg-[#dfe9fb] dark:bg-[#0c1530] px-3 py-2" },
+            React.createElement("span", { className: "num flex-1 text-[11.5px] font-black text-blue-700 dark:text-blue-300" }, `${fa(multi.size)} انتخاب‌شده`),
+            React.createElement("button", { onClick: () => setMulti(new Set(allIds)), className: "rounded-lg px-2 py-1 text-[11px] font-extrabold text-blue-600 dark:text-blue-300" }, "همه"),
+            React.createElement("button", { onClick: () => p.onOpenExport([...multi]), disabled: !multi.size, className: "rounded-lg bg-blue-600 px-2.5 py-1 text-[11px] font-extrabold text-white disabled:opacity-40" }, "کپی لینک"),
+            React.createElement("button", { onClick: () => { p.onDeleteMany([...multi]); setMulti(null); }, disabled: !multi.size, className: "rounded-lg bg-rose-500/15 px-2.5 py-1 text-[11px] font-extrabold text-rose-600 disabled:opacity-40" }, "حذف"),
+            React.createElement("button", { onClick: () => setMulti(null), "aria-label": "لغو", className: "grid size-7 place-items-center rounded-lg text-slate-500" }, React.createElement(X, { size: 15 }))),
+        totalShown === 0 ? (React.createElement(EmptyState, { icon: ServerOff, title: "هنوز کانفیگی وجود ندارد", desc: "با «از کلیپ‌بورد» یا «QR» کانفیگ و اشتراک اضافه کنید." })) : groups.map((g) => (React.createElement("section", { key: g.sub ? g.sub.id : 'x', className: "mb-5" },
+            p.selectedSub === ALL_SUB_ID && g.sub && (React.createElement("div", { className: "sticky top-0 z-10 -mx-1 mb-2 flex items-center gap-2 bg-[#eef3fc]/95 dark:bg-[#04060e]/95 px-1 py-1.5" },
+                (() => { const Icon = subIcon(g.sub); return React.createElement(Icon, { size: 13, className: "text-blue-500" }); })(),
+                React.createElement("span", { className: "text-[11px] font-black text-slate-500 dark:text-slate-400" }, g.sub.name),
+                React.createElement("span", { className: "num rounded-md bg-slate-500/10 px-1.5 py-0.5 text-[9px] font-black text-slate-400" }, fa(g.items.length)),
+                React.createElement("span", { className: "h-px flex-1 bg-slate-300/60 dark:bg-white/10" }))),
+            React.createElement("div", { className: "grid grid-cols-1 gap-2.5" }, g.items.map((cfg) => React.createElement(ConfigTile, {
+                key: cfg.id, cfg: cfg, busy: p.testingIds.has(cfg.id),
+                picked: p.mode === 'manual' && p.manualId === cfg.id, active: p.activeId === cfg.id,
+                multi: !!multi, checked: !!(multi && multi.has(cfg.id)),
+                onTap: () => (multi ? toggle(cfg.id) : p.onPick(cfg)),
+                onLong: () => { if (!multi) setMulti(new Set([cfg.id])); },
+                onTest: () => p.onTestOne(cfg.id),
+            }))))))));
+}
+function ExportSheet({ configs, subs, ids, onClose, onCopy }) {
+    const links = (list) => list.map((c) => c.raw).join('\n');
+    const opt = (key, label, count, text, sub) => React.createElement("button", { key: key, disabled: !count, onClick: () => { onCopy(text, count); onClose(); },
+        className: "flex w-full items-center justify-between gap-2 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5 px-4 py-3 text-start transition active:scale-[.98] disabled:opacity-40" },
+        React.createElement("span", { className: "min-w-0 flex-1" },
+            React.createElement("span", { className: "block truncate text-[12.5px] font-extrabold text-slate-700 dark:text-slate-200" }, label),
+            sub && React.createElement("span", { className: "block text-[10px] font-semibold text-slate-400" }, sub)),
+        React.createElement("span", { className: "num rounded-lg bg-blue-600/10 px-2 py-0.5 text-[10px] font-black text-blue-600 dark:text-blue-400" }, fa(count)),
+        React.createElement(Copy, { size: 15, className: "text-slate-400" }));
+    const chosen = configs.filter((c) => ids.includes(c.id));
+    const urlSubs = subs.filter((s) => s.url);
+    return React.createElement(Sheet, { onClose: onClose, title: "کپی لینک‌ها", icon: Copy },
+        React.createElement("div", { className: "thin-scroll flex max-h-[60vh] flex-col gap-2 overflow-y-auto" },
+            chosen.length > 0 && opt('sel', 'کانفیگ‌های انتخاب‌شده', chosen.length, links(chosen), 'لینک هر کانفیگ در یک خط'),
+            opt('all', 'همه‌ی کانفیگ‌ها', configs.length, links(configs), 'از همه‌ی اشتراک‌ها'),
+            subs.map((s) => { const l = configs.filter((c) => c.subId === s.id); return l.length ? opt('s' + s.id, `کانفیگ‌های «${s.name}»`, l.length, links(l)) : null; }),
+            urlSubs.length > 0 && opt('urls', 'لینک همه‌ی اشتراک‌ها', urlSubs.length, urlSubs.map((s) => s.url).join('\n'), 'آدرس سابسکریپشن‌ها'),
+            urlSubs.map((s) => opt('u' + s.id, `لینک اشتراک «${s.name}»`, 1, s.url))));
+}
+
+/* ===== tabs/Home.tsx ===== */
+function Stat({ icon: Icon, label, value, unit }) {
+    return (React.createElement("div", { className: "animate-fade-up rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-white/[.04] p-3" },
+        React.createElement("div", { className: "flex items-center gap-1 text-[10px] font-bold text-slate-400 dark:text-slate-500" },
+            React.createElement(Icon, { size: 11 }),
+            " ",
+            label),
+        React.createElement("div", { className: "num mt-1.5 flex items-baseline gap-1 text-xl font-black text-slate-800 dark:text-white" },
+            value,
+            unit && React.createElement("span", { className: "text-[9px] font-bold text-slate-400" }, unit))));
+}
+function Home(p) {
+    const { conn, traffic, effective, selectedSub } = p;
+    const [selOpen, setSelOpen] = useState(false);
+    const byId = useMemo(() => new Map(p.configs.map((c) => [c.id, c])), [p.configs]);
+    const selSub = selectedSub === ALL_SUB_ID ? null : p.subs.find((s) => s.id === selectedSub) || null;
+    const SelIcon = subIcon(selSub);
+    const selName = selSub ? selSub.name : 'همه اشتراک‌ها';
+    const lastBest = useMemo(() => {
+        if (!conn.results.length)
+            return null;
+        const ok = conn.results.filter((r) => r.ping >= 0);
+        if (!ok.length)
+            return null;
+        const best = ok.reduce((a, b) => (a.ping <= b.ping ? a : b));
+        return { ping: best.ping, cfg: byId.get(best.configId) };
+    }, [conn.results, byId]);
+    const statusLine = {
+        idle: conn.results.length ? 'آماده اتصال با نتایج آخرین تست' : 'برای اتصال هوشمند، دکمه را لمس کنید',
+        testing: `در حال تست پینگ سرورها… ${fa(conn.tested)} از ${fa(conn.total)}`,
+        connecting: 'در حال تست سرعت و اتصال به بهترین سرور…',
+        connected: 'اتصال امن برقرار است',
+    }[conn.status];
+    const progress = conn.total ? conn.tested / conn.total : 0;
+    const recent = [...conn.results].slice(-4).reverse();
+    return (React.createElement("div", { className: "thin-scroll flex h-full flex-col items-center overflow-y-auto px-5 pb-6 pt-1" },
+        React.createElement("div", { className: cn("relative z-30 w-full", p.mode !== 'sub' && 'hidden') },
+            React.createElement("button", { onClick: () => setSelOpen((v) => !v), className: cn('glass flex w-full items-center gap-2.5 rounded-2xl border px-3.5 py-2.5 text-start shadow-sm transition active:scale-[.98]', selOpen ? 'border-blue-400/60' : 'border-slate-200/70 dark:border-white/10') },
+                React.createElement("span", { className: "grid size-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-600/25" },
+                    React.createElement(SelIcon, { size: 16 })),
+                React.createElement("span", { className: "flex-1 leading-tight" },
+                    React.createElement("span", { className: "block text-[13px] font-extrabold text-slate-800 dark:text-slate-100" }, selName),
+                    React.createElement("span", { className: "num block text-[10px] font-semibold text-slate-400" },
+                        fa(effective.length),
+                        " \u06A9\u0627\u0646\u0641\u06CC\u06AF \u062F\u0631 \u062F\u0633\u062A\u0631\u0633")),
+                React.createElement(ChevronDown, { size: 16, className: cn('text-slate-400 transition-transform', selOpen && 'rotate-180') })),
+            selOpen && (React.createElement(React.Fragment, null,
+                React.createElement("div", { className: "fixed inset-0 z-20", onClick: () => setSelOpen(false) }),
+                React.createElement("div", { className: "glass animate-pop absolute inset-x-0 top-14 z-30 overflow-hidden rounded-2xl border border-slate-200/70 dark:border-white/10 shadow-2xl" },
+                    React.createElement("div", { className: "max-h-64 overflow-y-auto p-1.5 no-scrollbar" }, [{ id: ALL_SUB_ID, name: 'همه اشتراک‌ها', count: p.configs.length },
+                        ...p.subs.map((s) => ({ id: s.id, name: s.name, count: p.configs.filter((c) => c.subId === s.id).length })),].map((row) => {
+                        const real = row.id === ALL_SUB_ID ? null : p.subs.find((s) => s.id === row.id) || null;
+                        const Icon = subIcon(real);
+                        const active = selectedSub === row.id;
+                        return (React.createElement("button", { key: row.id, onClick: () => { p.onSelectSub(row.id); setSelOpen(false); }, className: cn('flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-start transition', active ? 'bg-blue-600/10 text-blue-700 dark:text-blue-300' : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-white/5') },
+                            React.createElement(Icon, { size: 15, className: active ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400' }),
+                            React.createElement("span", { className: "flex-1 truncate text-[13px] font-bold" }, row.name),
+                            React.createElement("span", { className: "num text-[10px] font-bold text-slate-400" }, fa(row.count)),
+                            active && React.createElement(Check, { size: 15, className: "text-blue-600 dark:text-blue-400" })));
+                    })))))),
+        React.createElement("div", { className: "mt-3 flex shrink-0 flex-col items-center gap-1.5" },
+            React.createElement("div", { className: "flex rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-white/[.04] p-1" }, [['auto', 'خودکار'], ['sub', 'اشتراک'], ['manual', 'دستی']].map(([m, l]) => React.createElement("button", { key: m, onClick: () => p.onMode(m), className: cn('rounded-xl px-3.5 py-1.5 text-[11px] font-black transition', p.mode === m ? 'bg-blue-600 text-white shadow' : 'text-slate-500 dark:text-slate-400') }, l))),
+            React.createElement("p", { className: "max-w-72 truncate text-[10.5px] font-bold text-slate-400" }, p.mode === 'manual' ? (p.manualCfg ? 'کانفیگ: ' + p.manualCfg.name : 'از تب کانفیگ‌ها یکی را انتخاب کنید') : p.mode === 'sub' ? 'سریع‌ترین کانفیگ در اشتراک انتخاب‌شده' : 'سریع‌ترین بین همه‌ی اشتراک‌ها و کانفیگ‌ها')),
+        React.createElement("div", { className: "mt-4 shrink-0" },
+            React.createElement(ConnectOrb, { status: conn.status, onPress: p.onOrb, motion: p.motion, progress: conn.status === 'testing' ? progress : undefined })),
+        React.createElement("div", { className: "mt-1 flex items-center gap-2 text-center" },
+            React.createElement("span", { className: cn('size-2 rounded-full', conn.status === 'connected' ? 'animate-blink bg-cyan-400 shadow-[0_0_10px_2px_rgba(34,211,238,.6)]'
+                    : conn.status === 'idle' ? 'bg-slate-300 dark:bg-slate-600'
+                        : 'animate-blink bg-amber-400 shadow-[0_0_10px_2px_rgba(251,191,36,.5)]') }),
+            React.createElement("p", { className: cn('text-[13px] font-extrabold', conn.status === 'connected' ? 'text-cyan-600 dark:text-cyan-300' : 'text-slate-500 dark:text-slate-300') }, statusLine)),
+        (conn.status === 'testing' || conn.status === 'connecting') && (React.createElement("p", { className: "mt-1 text-[10px] font-bold text-slate-400" }, "\u0628\u0631\u0627\u06CC \u0644\u063A\u0648\u060C \u062F\u0648\u0628\u0627\u0631\u0647 \u062F\u06A9\u0645\u0647 \u0631\u0627 \u0644\u0645\u0633 \u06A9\u0646\u06CC\u062F")),
+        conn.status === 'connected' && (React.createElement("p", { className: "mt-1 text-[10px] font-bold text-slate-400" }, "\u0628\u0631\u0627\u06CC \u0642\u0637\u0639 \u0627\u062A\u0635\u0627\u0644\u060C \u062F\u0648\u0628\u0627\u0631\u0647 \u062F\u06A9\u0645\u0647 \u0631\u0627 \u0644\u0645\u0633 \u06A9\u0646\u06CC\u062F")),
+        React.createElement("div", { className: "mt-4 w-full" },
+            conn.status === 'testing' && (React.createElement("div", { className: "animate-fade-up rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-white/[.04] p-4" },
+                React.createElement("div", { className: "mb-2 flex items-center justify-between text-[11px] font-extrabold" },
+                    React.createElement("span", { className: "flex items-center gap-1.5 text-slate-500 dark:text-slate-300" },
+                        React.createElement(Activity, { size: 13, className: "text-blue-500" }),
+                        " \u062A\u0633\u062A \u062A\u0627\u062E\u06CC\u0631 (Delay Test)"),
+                    React.createElement("span", { className: "num text-blue-600 dark:text-blue-400" },
+                        fa(Math.round(progress * 100)),
+                        "\u066A")),
+                React.createElement("div", { className: "h-2 overflow-hidden rounded-full bg-slate-200/80 dark:bg-white/10" },
+                    React.createElement("div", { className: "h-full rounded-full bg-gradient-to-l from-cyan-400 via-blue-500 to-indigo-500 transition-all duration-300", style: { width: `${Math.max(4, progress * 100)}%` } })),
+                React.createElement("div", { className: "mt-3 flex flex-col gap-1.5" },
+                    recent.map((r) => {
+                        const cfg = byId.get(r.configId);
+                        if (!cfg)
+                            return null;
+                        const tone = pingTone(r.ping);
+                        return (React.createElement("div", { key: r.configId, className: "animate-fade-up flex items-center gap-2 text-[11px]" },
+                            React.createElement("span", { className: cn('size-1.5 shrink-0 rounded-full', tone.dot) }),
+                            React.createElement("span", { className: "flex-1 truncate font-bold text-slate-600 dark:text-slate-300" }, cfg.name),
+                            React.createElement("span", { className: cn('num font-black', tone.text) }, tone.label)));
+                    }),
+                    !recent.length && React.createElement("p", { className: "py-1 text-center text-[10px] font-bold text-slate-400" }, "\u062F\u0631 \u062D\u0627\u0644 \u0627\u0631\u0633\u0627\u0644 \u0628\u0633\u062A\u0647\u200C\u0647\u0627\u06CC \u062A\u0633\u062A\u2026")))),
+            conn.status === 'connecting' && conn.best && (React.createElement("div", { className: "animate-fade-up rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-white/[.04] p-4 pt-3" },
+                React.createElement("p", { className: "flex items-center justify-center gap-1.5 text-[11px] font-extrabold text-slate-500 dark:text-slate-300" },
+                    React.createElement(Zap, { size: 13, className: "text-amber-500" }),
+                    " \u062A\u0633\u062A \u0633\u0631\u0639\u062A \u2014 ",
+                    conn.best.name),
+                React.createElement(SpeedGauge, { value: conn.speed ?? 0 }),
+                React.createElement("p", { className: "num mt-1 text-center text-[10px] font-bold text-slate-400" },
+                    "\u067E\u06CC\u0646\u06AF ",
+                    fa(conn.bestPing ?? 0),
+                    " \u0645\u06CC\u0644\u06CC\u200C\u062B\u0627\u0646\u06CC\u0647 \u2014 \u062F\u0631 \u062D\u0627\u0644 \u0628\u0631\u0642\u0631\u0627\u0631\u06CC \u062A\u0648\u0646\u0644\u2026"))),
+            conn.status === 'connected' && conn.best && (React.createElement("div", { className: "flex flex-col gap-3" },
+                React.createElement("div", { className: "grid grid-cols-2 gap-2.5" },
+                    React.createElement(Stat, { icon: Timer, label: "\u0645\u062F\u062A \u0627\u062A\u0635\u0627\u0644", value: faDuration(traffic.elapsed) }),
+                    React.createElement(Stat, { icon: Signal, label: "\u067E\u06CC\u0646\u06AF", value: fa(conn.bestPing ?? 0), unit: "ms" }),
+                    React.createElement(Stat, { icon: ArrowDownToLine, label: "\u062F\u0627\u0646\u0644\u0648\u062F", value: fa(traffic.dl.toFixed(1), 1), unit: "Mbps" }),
+                    React.createElement(Stat, { icon: ArrowUpFromLine, label: "\u0622\u067E\u0644\u0648\u062F", value: fa(traffic.ul.toFixed(1), 1), unit: "Mbps" })),
+                React.createElement("div", { className: "animate-fade-up rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-white/[.04] p-3.5" },
+                    React.createElement("div", { className: "mb-1.5 flex items-center justify-between" },
+                        React.createElement("span", { className: "flex items-center gap-1.5 text-[10px] font-extrabold text-slate-400" },
+                            React.createElement(Activity, { size: 12, className: "text-cyan-500" }),
+                            " \u0646\u0645\u0648\u062F\u0627\u0631 \u0632\u0646\u062F\u0647 \u062F\u0627\u0646\u0644\u0648\u062F"),
+                        React.createElement("span", { className: "num text-[10px] font-black text-cyan-600 dark:text-cyan-400" },
+                            fa(traffic.dl.toFixed(1), 1),
+                            " Mbps")),
+                    React.createElement(Sparkline, { data: traffic.up })),
+                React.createElement("div", { className: "animate-fade-up flex items-center gap-3 rounded-3xl border border-cyan-400/25 bg-gradient-to-l from-cyan-500/10 via-blue-500/5 to-transparent p-3.5" },
+                    React.createElement("span", { className: "grid size-11 shrink-0 place-items-center rounded-2xl text-[11px] font-black text-white shadow-lg", style: { background: `linear-gradient(135deg, ${protoMeta(conn.best.protocol).color}, #2563eb)` } }, protoMeta(conn.best.protocol).abbr),
+                    React.createElement("div", { className: "min-w-0 flex-1" },
+                        React.createElement("p", { className: "truncate text-[13px] font-extrabold text-slate-800 dark:text-slate-100" }, conn.best.name),
+                        React.createElement("p", { dir: "ltr", className: "num truncate text-end text-[10px] font-semibold text-slate-400" },
+                            conn.best.server,
+                            ":",
+                            conn.best.port)),
+                    React.createElement(NetInfo, { conn: conn })))),
+            conn.status === 'idle' && (React.createElement("div", { className: "flex flex-col gap-3" },
+                lastBest?.cfg && (React.createElement("div", { className: "animate-fade-up flex items-center gap-3 rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-white/[.04] p-3.5" },
+                    React.createElement("span", { className: "grid size-10 shrink-0 place-items-center rounded-2xl bg-emerald-500/10 text-emerald-500" },
+                        React.createElement(Zap, { size: 17 })),
+                    React.createElement("div", { className: "min-w-0 flex-1" },
+                        React.createElement("p", { className: "text-[10px] font-bold text-slate-400" }, "\u0628\u0647\u062A\u0631\u06CC\u0646 \u0633\u0631\u0648\u0631 \u0622\u062E\u0631\u06CC\u0646 \u062A\u0633\u062A"),
+                        React.createElement("p", { className: "truncate text-[12px] font-extrabold text-slate-700 dark:text-slate-200" }, lastBest.cfg.name)),
+                    React.createElement("span", { className: cn('num shrink-0 rounded-lg px-2 py-1 text-[11px] font-black', pingTone(lastBest.ping).bg, pingTone(lastBest.ping).text) }, pingTone(lastBest.ping).label))),
+                effective.length === 0 ? (React.createElement("button", { onClick: p.onEmptyAdd, className: "animate-fade-up flex w-full items-center justify-center gap-2 rounded-3xl border-2 border-dashed border-blue-400/40 bg-blue-500/5 p-4 text-[13px] font-extrabold text-blue-600 transition active:scale-[.98] dark:text-blue-400" },
+                    React.createElement(Plus, { size: 17 }),
+                    " \u0627\u0641\u0632\u0648\u062F\u0646 \u0627\u0648\u0644\u06CC\u0646 \u06A9\u0627\u0646\u0641\u06CC\u06AF \u06CC\u0627 \u0627\u0634\u062A\u0631\u0627\u06A9")) : (React.createElement("div", { className: "grid grid-cols-3 gap-2.5" },
+                    React.createElement(Stat, { icon: Layers, label: "\u06A9\u0627\u0646\u0641\u06CC\u06AF\u200C\u0647\u0627", value: fa(effective.length) }),
+                    React.createElement(Stat, { icon: Activity, label: "\u062A\u0633\u062A\u200C\u0634\u062F\u0647", value: fa(conn.results.filter((r) => r.ping >= 0).length || effective.filter((c) => (c.ping ?? -1) >= 0).length) }),
+                    React.createElement(Stat, { icon: Clock, label: "\u0627\u0634\u062A\u0631\u0627\u06A9\u200C\u0647\u0627", value: fa(p.subs.length) }))),
+                React.createElement("p", { className: "px-2 text-center text-[10px] leading-5 text-slate-400 dark:text-slate-500" },
+                    "\u0628\u0627 \u0627\u062A\u0635\u0627\u0644 \u0647\u0648\u0634\u0645\u0646\u062F\u060C \u067E\u06CC\u0646\u06AF \u0647\u0645\u0647 \u0633\u0631\u0648\u0631\u0647\u0627\u06CC \u00AB",
+                    selName,
+                    "\u00BB \u062A\u0633\u062A \u0648 \u0628\u0647 \u0633\u0631\u06CC\u0639\u200C\u062A\u0631\u06CC\u0646\u0650 \u0622\u0646\u200C\u0647\u0627 \u0645\u062A\u0635\u0644 \u0645\u06CC\u200C\u0634\u0648\u06CC\u062F."))))));
+}
+
+
+/* ===== tabs/Settings.tsx ===== */
+function Section({ title, children }) {
+    return (React.createElement("div", { className: "mb-4" },
+        React.createElement("p", { className: "mb-2 px-1 text-[11px] font-black text-slate-400 dark:text-slate-500" }, title),
+        React.createElement("div", { className: "overflow-hidden rounded-3xl border border-slate-200/70 dark:border-white/[.08] bg-white/70 dark:bg-white/[.04]" }, children)));
+}
+function Row({ icon: Icon, title, desc, control, onClick, }) {
+    return (React.createElement("div", { onClick: onClick, className: cn('flex items-center gap-3 border-b border-slate-100 dark:border-white/5 p-3.5 last:border-0', onClick && 'cursor-pointer active:bg-slate-50 dark:active:bg-white/5') },
+        React.createElement("span", { className: "grid size-10 shrink-0 place-items-center rounded-2xl bg-blue-600/10 text-blue-600 dark:text-blue-400" },
+            React.createElement(Icon, { size: 17 })),
+        React.createElement("span", { className: "min-w-0 flex-1" },
+            React.createElement("span", { className: "block text-[13px] font-extrabold text-slate-700 dark:text-slate-200" }, title),
+            desc && React.createElement("span", { className: "mt-0.5 block text-[10px] leading-4 font-semibold text-slate-400" }, desc)),
+        control));
+}
+
+const GROUP_META = {
+    ui: [Bell, 'from-blue-500 to-indigo-600'],
+    vpn: [ShieldCheck, 'from-emerald-500 to-teal-600'],
+    core: [Cpu, 'from-violet-500 to-purple-600'],
+    mux: [Layers, 'from-amber-500 to-orange-600'],
+    fragment: [Scissors, 'from-rose-500 to-pink-600'],
+    observatory: [Activity, 'from-cyan-500 to-sky-600'],
+    routing: [Route, 'from-fuchsia-500 to-purple-600'],
+    advanced: [SlidersHorizontal, 'from-slate-500 to-slate-700'],
+    mode: [Smartphone, 'from-lime-500 to-green-600'],
+    about: [Info, 'from-sky-500 to-blue-600'],
+};
+GROUP_META.perapp = [LayoutGrid, 'from-teal-500 to-cyan-600'];
+const ABOUT_ROWS = [['نام برنامه', 'Blu net'], ['سازنده', 'AHJ'], ['نسخه', '1.0'], ['هسته', 'Xray-core'], ['مجوز', 'بر پایه‌ی v2rayNG (GPL-3.0)']];
+function AppPickerSheet({ pkgs, onChange, onClose }) {
+    const [apps, setApps] = useState(null);
+    const [q, setQ] = useState('');
+    const [sys, setSys] = useState(false);
+    useEffect(() => { abiCall('listApps').then((r) => setApps(r.apps)).catch(() => setApps([])); }, []);
+    const needle = q.trim().toLowerCase();
+    const shown = (apps || []).filter((a) => (sys || !a.sys || pkgs.has(a.pkg)) && (!needle || a.label.toLowerCase().includes(needle) || a.pkg.toLowerCase().includes(needle)));
+    const toggle = (pkg) => { const n = new Set(pkgs); if (n.has(pkg)) n.delete(pkg); else n.add(pkg); onChange(n); };
+    const field = 'w-full rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 py-2.5 text-[12px] font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500';
+    return React.createElement("div", { className: "fixed inset-0 z-[60] flex flex-col bg-[#eef3fc] dark:bg-[#04060e]" },
+        React.createElement("div", { className: "flex items-center gap-3 border-b border-slate-200/70 dark:border-white/10 px-4 pb-3", style: { paddingTop: 'max(14px, env(safe-area-inset-top))' } },
+            React.createElement("button", { onClick: onClose, "aria-label": "بستن", className: "grid size-9 place-items-center rounded-xl border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5 text-slate-500 dark:text-slate-300" }, React.createElement(X, { size: 16 })),
+            React.createElement("div", { className: "flex-1" },
+                React.createElement("h2", { className: "text-[15px] font-black text-slate-800 dark:text-white" }, "انتخاب برنامه‌ها"),
+                React.createElement("p", { className: "num text-[10px] font-bold text-slate-400" }, `${fa(pkgs.size)} برنامه انتخاب شده`))),
+        React.createElement("div", { className: "space-y-2.5 px-4 pb-2 pt-3" },
+            React.createElement("div", { className: "relative" },
+                React.createElement(Search, { size: 15, className: "pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-slate-400" }),
+                React.createElement("input", { value: q, onChange: (e) => setQ(e.target.value), placeholder: "جستجوی برنامه…", className: field + ' ps-9' })),
+            React.createElement("div", { className: "flex items-center gap-2" },
+                React.createElement("button", { onClick: () => setSys(!sys), className: cn('rounded-full border px-3 py-1.5 text-[11px] font-extrabold transition', sys ? 'border-blue-500 bg-blue-600/10 text-blue-600 dark:text-blue-300' : 'border-slate-200 dark:border-white/10 text-slate-500') }, "برنامه‌های سیستمی"),
+                React.createElement("span", { className: "flex-1" }),
+                React.createElement("button", { onClick: () => onChange(new Set([...pkgs, ...shown.map((a) => a.pkg)])), className: "rounded-lg px-2 py-1 text-[11px] font-extrabold text-blue-600 dark:text-blue-300" }, "انتخاب همه"),
+                React.createElement("button", { onClick: () => onChange(new Set()), className: "rounded-lg px-2 py-1 text-[11px] font-extrabold text-rose-600" }, "پاک کردن"))),
+        React.createElement("div", { className: "thin-scroll flex-1 space-y-2 overflow-y-auto px-4 pb-8" },
+            apps === null && React.createElement("div", { className: "grid place-items-center py-16 text-blue-500" }, React.createElement(Loader2, { size: 24, className: "animate-spin" })),
+            apps !== null && shown.length === 0 && React.createElement("p", { className: "py-12 text-center text-[12px] font-bold text-slate-400" }, "برنامه‌ای پیدا نشد"),
+            shown.map((a) => React.createElement("button", { key: a.pkg, onClick: () => toggle(a.pkg), className: cn('cfg-row flex w-full items-center gap-3 rounded-2xl border px-3 py-2.5 text-start transition active:scale-[.99]', pkgs.has(a.pkg) ? 'border-blue-500 bg-blue-600/10' : 'border-slate-200/80 dark:border-white/10 bg-white/80 dark:bg-white/[.05]') },
+                a.icon ? React.createElement("img", { src: a.icon, alt: "", className: "size-10 shrink-0 rounded-xl" }) : React.createElement("span", { className: "grid size-10 shrink-0 place-items-center rounded-xl bg-slate-200 dark:bg-white/10" }, React.createElement(Package, { size: 18 })),
+                React.createElement("span", { className: "min-w-0 flex-1" },
+                    React.createElement("span", { className: "block truncate text-[12.5px] font-extrabold text-slate-800 dark:text-slate-100" }, a.label),
+                    React.createElement("span", { dir: "ltr", className: "block truncate text-start text-[9.5px] font-semibold text-slate-400" }, a.pkg)),
+                React.createElement("span", { className: cn('grid size-6 shrink-0 place-items-center rounded-full border-2 transition', pkgs.has(a.pkg) ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-300 dark:border-white/20') }, pkgs.has(a.pkg) && React.createElement(Check, { size: 13 }))))));
+}
+function MenuDrawer({ onClose }) {
+    const [vals, setVals] = useState(mainDefaults());
+    const [open, setOpen] = useState('ui');
+    const [q, setQ] = useState('');
+    const [perApp, setPerApp] = useState({ enabled: false, bypass: false, pkgs: new Set() });
+    const [picker, setPicker] = useState(false);
+    useEffect(() => { if (window.AbinetNative) abiCall('getPerApp').then((r) => setPerApp({ enabled: r.enabled, bypass: r.bypass, pkgs: new Set(r.pkgs) })).catch(() => {}); }, []);
+    const savePerApp = (patch) => {
+        setPerApp((o) => ({ ...o, ...patch }));
+        if (!window.AbinetNative) return;
+        const msg = { ...patch };
+        if (msg.pkgs) msg.pkgs = [...msg.pkgs];
+        abiCall('setPerApp', msg).catch(() => {});
+    };
+    useEffect(() => { if (window.AbinetNative) abiCall('getSettings', { defaults: mainDefaults() }).then((r) => setVals(r.values)).catch(() => {}); }, []);
+    const set = (it, v) => {
+        setVals((o) => ({ ...o, [it.key]: v }));
+        if (window.AbinetNative) abiCall('setSetting', { key: it.key, type: it.type === 'switch' ? 'bool' : 'string', value: v }).catch(() => {});
+    };
+    const reset = async () => {
+        if (window.AbinetNative) await abiCall('resetSettings', { defaults: mainDefaults() }).catch(() => {});
+        setVals(mainDefaults());
+    };
+    const field = 'w-full rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 px-3 py-2.5 text-[12px] font-semibold text-slate-700 dark:text-slate-200 outline-none focus:border-blue-500';
+    const needle = q.trim().toLowerCase();
+    const match = (it) => !needle || (it.title + ' ' + (it.summary || '') + ' ' + it.key).toLowerCase().includes(needle);
+    const groups = MAIN_SETTINGS.map((g) => ({ ...g, shown: g.items.filter(match) })).filter((g) => g.shown.length);
+    const perAppShown = !needle || 'تفکیک برنامه تونل برنامه‌ها اپ app proxy split per-app'.includes(needle);
+    const aboutShown = !needle || 'درباره ما about blu net ahj'.includes(needle);
+    const jump = (id) => { setQ(''); setOpen(id); setTimeout(() => { const el = document.getElementById('set-' + id); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80); };
+    const row = (it) => React.createElement("div", { key: it.key, className: "flex flex-col gap-1.5 border-b border-slate-100 dark:border-white/5 py-3 last:border-0" },
+        React.createElement("div", { className: "flex items-center justify-between gap-3" },
+            React.createElement("div", { className: "min-w-0" },
+                React.createElement("p", { className: "text-[12.5px] font-extrabold text-slate-700 dark:text-slate-200" }, it.title),
+                it.summary && React.createElement("p", { className: "text-[10px] font-semibold text-slate-400" }, it.summary)),
+            it.type === 'switch' && React.createElement(Toggle, { checked: !!vals[it.key], onChange: () => set(it, !vals[it.key]) })),
+        (it.type === 'edit') && React.createElement("input", { className: field, dir: "ltr", placeholder: it.placeholder, value: vals[it.key] ?? '', type: it.kind === 'password' ? 'password' : 'text', inputMode: it.kind === 'number' ? 'numeric' : undefined, onChange: (e) => set(it, e.target.value) }),
+        (it.type === 'json') && React.createElement("textarea", { className: field + ' h-32 font-mono', dir: "ltr", value: vals[it.key] ?? '', onChange: (e) => set(it, e.target.value) }),
+        it.type === 'list' && React.createElement("select", { className: field, value: vals[it.key], onChange: (e) => set(it, e.target.value) }, it.options.map(([v, l]) => React.createElement("option", { key: v, value: v }, l))));
+    const card = (id, title, count, body) => {
+        const [Icon, grad] = GROUP_META[id] || [Info, 'from-blue-500 to-indigo-600'];
+        const isOpen = needle ? true : open === id;
+        return React.createElement("section", { key: id, id: 'set-' + id, className: "overflow-hidden rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/75 dark:bg-white/[.04]" },
+            React.createElement("button", { className: "flex w-full items-center gap-3 px-3.5 py-3 text-start", onClick: () => setOpen(open === id ? '' : id) },
+                React.createElement("span", { className: cn('grid size-10 shrink-0 place-items-center rounded-2xl bg-gradient-to-br text-white shadow-md', grad) }, React.createElement(Icon, { size: 18 })),
+                React.createElement("span", { className: "min-w-0 flex-1" },
+                    React.createElement("span", { className: "block text-[13.5px] font-black text-slate-800 dark:text-slate-100" }, title),
+                    count && React.createElement("span", { className: "block text-[10px] font-semibold text-slate-400" }, count)),
+                React.createElement(ChevronDown, { size: 16, className: cn('text-slate-400 transition-transform', isOpen && 'rotate-180') })),
+            isOpen && React.createElement("div", { className: "border-t border-slate-100 dark:border-white/5 px-4 pb-1" }, body));
+    };
+    const chips = [...groups.map((g) => [g.id, g.title]), ...(perAppShown ? [['perapp', 'تفکیک برنامه‌ها']] : []), ...(aboutShown ? [['about', 'درباره ما']] : [])];
+    return React.createElement("div", { className: "fixed inset-0 z-50" },
+        picker && React.createElement(AppPickerSheet, { pkgs: perApp.pkgs, onChange: (n) => savePerApp({ pkgs: n }), onClose: () => setPicker(false) }),
+        React.createElement("div", { className: "absolute inset-0 bg-slate-950/60", onClick: onClose }),
+        React.createElement("aside", { className: "drawer-in absolute inset-y-0 start-0 flex w-[90%] max-w-[380px] flex-col bg-[#eef3fc] dark:bg-[#04060e] shadow-2xl" },
+            React.createElement("div", { className: "flex items-center gap-3 border-b border-slate-200/70 dark:border-white/10 px-5 pb-3", style: { paddingTop: 'max(16px, env(safe-area-inset-top))' } },
+                React.createElement("span", { className: "grid size-11 place-items-center rounded-2xl bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 text-white shadow-lg shadow-blue-600/30" },
+                    React.createElement(ShieldCheck, { size: 22 })),
+                React.createElement("div", { className: "flex-1 leading-tight" },
+                    React.createElement("h1", { className: "text-shine text-lg font-black" }, "Blu net"),
+                    React.createElement("p", { className: "text-[9.5px] font-bold text-slate-400 dark:text-slate-500" }, "\u0648\u06CC\u200C\u067E\u06CC\u200C\u0627\u0646 \u0647\u0648\u0634\u0645\u0646\u062F | by AHJ")),
+                React.createElement("button", { onClick: onClose, "aria-label": "بستن", className: "grid size-9 place-items-center rounded-xl border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5 text-slate-500 dark:text-slate-300" }, React.createElement(X, { size: 16 }))),
+            React.createElement("div", { className: "space-y-2.5 px-4 pb-1 pt-3" },
+                React.createElement("div", { className: "relative" },
+                    React.createElement(Search, { size: 15, className: "pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-slate-400" }),
+                    React.createElement("input", { value: q, onChange: (e) => setQ(e.target.value), placeholder: "جستجو در تنظیمات…", className: field + ' ps-9' })),
+                React.createElement("div", { className: "thin-scroll -mx-4 flex gap-2 overflow-x-auto px-4 pb-1" }, chips.map(([id, title]) => {
+                    const [Icon] = GROUP_META[id] || [Info];
+                    return React.createElement("button", { key: id, onClick: () => jump(id), className: "inline-flex shrink-0 items-center gap-1.5 rounded-full border border-slate-200 dark:border-white/10 bg-white/80 dark:bg-white/5 px-3 py-1.5 text-[11px] font-extrabold text-slate-600 dark:text-slate-300 transition active:scale-95" },
+                        React.createElement(Icon, { size: 13 }), title);
+                }))),
+            React.createElement("div", { className: "thin-scroll flex-1 space-y-3 overflow-y-auto p-4" },
+                groups.length === 0 && !aboutShown && React.createElement("p", { className: "py-10 text-center text-[12px] font-bold text-slate-400" }, "تنظیمی پیدا نشد"),
+                groups.map((g) => card(g.id, g.title, `${fa(g.shown.length)} تنظیم`, g.shown.map(row))),
+                perAppShown && card('perapp', 'تفکیک برنامه‌ها (تونل برنامه‌ها)', perApp.enabled ? `فعال · ${fa(perApp.pkgs.size)} برنامه` : 'غیرفعال', React.createElement("div", { className: "py-1" },
+                    React.createElement("div", { className: "flex items-center justify-between gap-3 border-b border-slate-100 dark:border-white/5 py-3" },
+                        React.createElement("div", { className: "min-w-0" },
+                            React.createElement("p", { className: "text-[12.5px] font-extrabold text-slate-700 dark:text-slate-200" }, "فعال‌سازی تفکیک برنامه‌ها"),
+                            React.createElement("p", { className: "text-[10px] font-semibold text-slate-400" }, "انتخاب کنید کدام برنامه‌ها از VPN استفاده کنند")),
+                        React.createElement(Toggle, { checked: perApp.enabled, onChange: () => savePerApp({ enabled: !perApp.enabled }) })),
+                    React.createElement("div", { className: "flex flex-col gap-1.5 border-b border-slate-100 dark:border-white/5 py-3" },
+                        React.createElement("p", { className: "text-[12.5px] font-extrabold text-slate-700 dark:text-slate-200" }, "حالت"),
+                        React.createElement("select", { className: field, value: perApp.bypass ? 'bypass' : 'proxy', onChange: (e) => savePerApp({ bypass: e.target.value === 'bypass' }) },
+                            React.createElement("option", { value: "proxy" }, "فقط برنامه‌های انتخابی از VPN استفاده کنند"),
+                            React.createElement("option", { value: "bypass" }, "برنامه‌های انتخابی از VPN رد نشوند (Bypass)"))),
+                    React.createElement("div", { className: "py-3" },
+                        React.createElement("button", { onClick: () => (window.AbinetNative ? setPicker(true) : null), disabled: !window.AbinetNative, className: "flex w-full items-center justify-between gap-2 rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-600 px-4 py-3 text-[12.5px] font-extrabold text-white shadow-md disabled:opacity-50" },
+                            React.createElement("span", null, "انتخاب برنامه‌ها"),
+                            React.createElement("span", { className: "num rounded-lg bg-white/20 px-2 py-0.5 text-[10.5px]" }, fa(perApp.pkgs.size))),
+                        React.createElement("p", { className: "pt-2 text-[10px] font-semibold leading-5 text-slate-400" }, window.AbinetNative ? 'تغییرات بعد از قطع و وصل دوباره‌ی VPN اعمال می‌شوند. اگر هیچ برنامه‌ای انتخاب نشود، همه‌ی برنامه‌ها از VPN استفاده می‌کنند.' : 'این بخش فقط در برنامه‌ی اندروید کار می‌کند.')))),
+                aboutShown && card('about', 'درباره ما', 'Blu net by AHJ', React.createElement("div", { className: "py-2" },
+                    ABOUT_ROWS.map(([k, v]) => React.createElement("div", { key: k, className: "flex items-center justify-between border-b border-slate-100 dark:border-white/5 py-2.5 last:border-0" },
+                        React.createElement("span", { className: "text-[11.5px] font-bold text-slate-400" }, k),
+                        React.createElement("span", { className: "text-[12px] font-extrabold text-slate-700 dark:text-slate-200" }, v))),
+                    React.createElement("p", { className: "pt-2 text-[11px] font-semibold leading-6 text-slate-500 dark:text-slate-400" }, "Blu net یک کلاینت VPN هوشمند برای اندروید است: اتصال خودکار به سریع‌ترین سرور، پینگ واقعی و پشتیبانی از VLESS، VMess، Trojan، Shadowsocks، Hysteria2 و WireGuard."))),
+                React.createElement("button", { onClick: reset, className: "w-full rounded-2xl bg-rose-500/10 py-3 text-[12px] font-extrabold text-rose-600" }, "بازگشت به پیش‌فرض"),
+                React.createElement("p", { className: "pb-6 text-center text-[10px] font-semibold text-slate-400" }, "بعضی تغییرات بعد از قطع و وصل دوباره اعمال می‌شوند."))));
+}
+function Settings(p) {
+    return (React.createElement("div", { className: "thin-scroll h-full overflow-y-auto px-5 pb-6 pt-1" },
+        React.createElement("h1", { className: "mb-4 text-lg font-black text-slate-800 dark:text-white" }, "\u062A\u0646\u0638\u06CC\u0645\u0627\u062A"),
+        React.createElement(Section, { title: "\u0638\u0627\u0647\u0631 \u0628\u0631\u0646\u0627\u0645\u0647" },
+            React.createElement(Row, { icon: Palette, title: "\u067E\u0648\u0633\u062A\u0647", desc: p.theme === 'dark' ? 'تاریک — مشکی و آبی' : 'روشن — سفید و آبی', control: React.createElement("div", { className: "flex rounded-xl bg-slate-100 dark:bg-white/10 p-1" }, [
+                    { id: 'light', label: 'روشن', icon: Sun },
+                    { id: 'dark', label: 'تاریک', icon: Moon },
+                ].map((opt) => (React.createElement("button", { key: opt.id, onClick: () => p.setTheme(opt.id), className: cn('flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] font-extrabold transition', p.theme === opt.id
+                        ? 'bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-600/25'
+                        : 'text-slate-500 dark:text-slate-400') },
+                    React.createElement(opt.icon, { size: 13 }),
+                    " ",
+                    opt.label)))) }),
+            React.createElement(Row, { icon: Sparkles, title: "\u0627\u0641\u06A9\u062A\u200C\u0647\u0627\u06CC \u062D\u0631\u06A9\u062A\u06CC", desc: "\u0627\u0646\u06CC\u0645\u06CC\u0634\u0646\u200C\u0647\u0627\u06CC \u062D\u0644\u0642\u0647 \u0627\u062A\u0635\u0627\u0644 \u0648 \u062F\u0631\u062E\u0634\u0634\u200C\u0647\u0627", control: React.createElement(Toggle, { checked: p.motion, onChange: p.setMotion }) })),
+        React.createElement(Section, { title: "\u0627\u062A\u0635\u0627\u0644 \u0647\u0648\u0634\u0645\u0646\u062F" },
+            React.createElement(Row, { icon: Zap, title: "\u0627\u0646\u062A\u062E\u0627\u0628 \u062E\u0648\u062F\u06A9\u0627\u0631 \u0628\u0647\u062A\u0631\u06CC\u0646 \u0633\u0631\u0648\u0631", desc: "\u067E\u06CC\u0646\u06AF \u0647\u0645\u0647 \u06A9\u0627\u0646\u0641\u06CC\u06AF\u200C\u0647\u0627\u06CC \u06AF\u0631\u0648\u0647 \u0627\u0646\u062A\u062E\u0627\u0628\u06CC \u062A\u0633\u062A \u0648 \u0628\u0647 \u0633\u0631\u06CC\u0639\u200C\u062A\u0631\u06CC\u0646 \u0645\u062A\u0635\u0644 \u0645\u06CC\u200C\u0634\u0648\u062F", control: React.createElement(Toggle, { checked: true, onChange: () => { } }) }),
+            React.createElement(Row, { icon: Rss, title: "\u0627\u0634\u062A\u0631\u0627\u06A9\u200C\u0647\u0627\u06CC \u0641\u0639\u0627\u0644", desc: `${fa(p.totalSubs)} اشتراک • ${fa(p.totalConfigs)} کانفیگ ذخیره‌شده` })),
+        React.createElement(Section, { title: "\u062F\u0627\u062F\u0647\u200C\u0647\u0627" },
+            React.createElement(Row, { icon: Database, title: "\u0628\u0627\u0632\u0646\u0634\u0627\u0646\u06CC \u06A9\u0627\u0645\u0644 \u0628\u0631\u0646\u0627\u0645\u0647", desc: "\u062D\u0630\u0641 \u0647\u0645\u0647 \u0627\u0634\u062A\u0631\u0627\u06A9\u200C\u0647\u0627 \u0648 \u06A9\u0627\u0646\u0641\u06CC\u06AF\u200C\u0647\u0627 \u0648 \u0628\u0627\u0632\u06AF\u0634\u062A \u0628\u0647 \u062D\u0627\u0644\u062A \u0627\u0648\u0644\u06CC\u0647", control: React.createElement("button", { onClick: p.onReset, className: "flex items-center gap-1.5 rounded-xl bg-gradient-to-br from-rose-600 to-rose-500 px-3.5 py-2 text-[11px] font-extrabold text-white shadow-lg shadow-rose-600/25 transition active:scale-95" },
+                    React.createElement(Trash2, { size: 13 }),
+                    " \u0628\u0627\u0632\u0646\u0634\u0627\u0646\u06CC") })),
+        React.createElement(Section, { title: "\u062F\u0631\u0628\u0627\u0631\u0647" },
+            React.createElement("div", { className: "flex flex-col items-center gap-2 p-6 text-center" },
+                React.createElement("span", { className: "grid size-16 place-items-center rounded-3xl bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 text-white shadow-xl shadow-blue-600/30" },
+                    React.createElement(ShieldCheck, { size: 30 })),
+                React.createElement("p", { className: "mt-1 text-lg font-black text-slate-800 dark:text-white" }, "Blu net"),
+                React.createElement("p", { className: "text-[10px] font-bold text-slate-400" }, "\u0646\u0633\u062E\u0647 \u06F1\u066B\u06F0\u066B\u06F0 \u2014 \u0648\u06CC\u200C\u067E\u06CC\u200C\u0627\u0646 \u0647\u0648\u0634\u0645\u0646\u062F"),
+                React.createElement("p", { className: "text-[11px] font-extrabold text-blue-600 dark:text-blue-400" }, "ساخته‌شده توسط AHJ"),
+                React.createElement("p", { className: "max-w-72 text-[10.5px] leading-6 text-slate-400 dark:text-slate-500" }, "\u0645\u062F\u06CC\u0631\u06CC\u062A \u06A9\u0627\u0645\u0644 \u0627\u0634\u062A\u0631\u0627\u06A9\u200C\u0647\u0627 \u0648 \u06A9\u0627\u0646\u0641\u06CC\u06AF\u200C\u0647\u0627 (VLESS, VMess, Trojan, Shadowsocks, Hysteria2, TUIC \u0648\u2026) \u0628\u0627 \u0627\u0641\u0632\u0648\u062F\u0646 \u062F\u0633\u062A\u06CC\u060C \u06A9\u0644\u06CC\u067E\u200C\u0628\u0648\u0631\u062F \u0648 \u0644\u06CC\u0646\u06A9 \u0627\u0634\u062A\u0631\u0627\u06A9\u061B \u062A\u0633\u062A \u067E\u06CC\u0646\u06AF \u06AF\u0631\u0648\u0647\u06CC \u0648 \u0627\u062A\u0635\u0627\u0644 \u062E\u0648\u062F\u06A9\u0627\u0631 \u0628\u0647 \u0628\u0647\u062A\u0631\u06CC\u0646 \u0633\u0631\u0648\u0631."),
+                !window.AbinetNative && React.createElement("p", { className: "mt-1 flex items-center gap-1 text-[9px] font-bold text-slate-400/80" },
+                    React.createElement(Wand2, { size: 10 }),
+                    " \u0646\u0633\u062E\u0647 \u0648\u0628 \u0646\u0645\u0627\u06CC\u0634\u06CC \u2014 \u062A\u0633\u062A \u062A\u0627\u062E\u06CC\u0631 \u0628\u0647\u200C\u0635\u0648\u0631\u062A \u0645\u062D\u0644\u06CC \u0634\u0628\u06CC\u0647\u200C\u0633\u0627\u0632\u06CC \u0645\u06CC\u200C\u0634\u0648\u062F")))));
+}
+
+
+/* ===== tabs/Subs.tsx ===== */
+function Subs(p) {
+    const countFor = (id) => p.configs.filter((c) => c.subId === id).length;
+    return (React.createElement("div", { className: "relative flex h-full flex-col px-5 pb-6 pt-1" },
+        React.createElement("div", { className: "mb-3 flex items-center gap-2" },
+            React.createElement("h1", { className: "text-lg font-black text-slate-800 dark:text-white" }, "\u0627\u0634\u062A\u0631\u0627\u06A9\u200C\u0647\u0627"),
+            React.createElement("span", { className: "num rounded-lg bg-blue-600/10 px-2 py-0.5 text-[10px] font-black text-blue-600 dark:text-blue-400" }, fa(p.subs.length))),
+        React.createElement("div", { className: "thin-scroll flex-1 overflow-y-auto pb-20 no-scrollbar" },
+            React.createElement("div", { className: "flex flex-col gap-2.5" },
+                React.createElement("button", { onClick: () => p.onSelect(ALL_SUB_ID), className: cn('flex w-full items-center gap-3 rounded-3xl border-2 p-3.5 text-start transition active:scale-[.98]', p.selectedSub === ALL_SUB_ID
+                        ? 'border-blue-500/70 bg-gradient-to-l from-blue-600/15 via-indigo-500/10 to-transparent shadow-lg shadow-blue-600/10'
+                        : 'border-slate-200/80 dark:border-white/[.08] bg-white/70 dark:bg-white/[.04]') },
+                    React.createElement("span", { className: "grid size-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-700 text-white shadow-lg shadow-blue-600/30" },
+                        React.createElement(LayoutGrid, { size: 20 })),
+                    React.createElement("span", { className: "min-w-0 flex-1" },
+                        React.createElement("span", { className: "block text-[14px] font-extrabold text-slate-800 dark:text-slate-100" }, "\u0647\u0645\u0647 \u0627\u0634\u062A\u0631\u0627\u06A9\u200C\u0647\u0627"),
+                        React.createElement("span", { className: "mt-0.5 block text-[10px] font-bold text-slate-400" }, "\u0627\u062A\u0635\u0627\u0644 \u0647\u0648\u0634\u0645\u0646\u062F \u0627\u0632 \u0645\u06CC\u0627\u0646 \u062A\u0645\u0627\u0645 \u06A9\u0627\u0646\u0641\u06CC\u06AF\u200C\u0647\u0627")),
+                    React.createElement("span", { className: "num shrink-0 rounded-xl bg-blue-600/10 px-2.5 py-1 text-[11px] font-black text-blue-600 dark:text-blue-400" }, fa(p.configs.length)),
+                    p.selectedSub === ALL_SUB_ID && (React.createElement("span", { className: "grid size-6 shrink-0 place-items-center rounded-full bg-blue-600 text-white shadow" },
+                        React.createElement(Check, { size: 13 })))),
+                p.subs.map((sub) => {
+                    const Icon = subIcon(sub);
+                    const active = p.selectedSub === sub.id;
+                    const deletable = sub.builtIn !== 'default';
+                    const updatable = !!sub.url || sub.builtIn === 'demo';
+                    return (React.createElement("div", { key: sub.id, onClick: () => p.onSelect(sub.id), className: cn('flex w-full cursor-pointer items-center gap-3 rounded-3xl border-2 p-3.5 transition active:scale-[.98]', active
+                            ? 'border-blue-500/70 bg-gradient-to-l from-blue-600/15 via-indigo-500/10 to-transparent shadow-lg shadow-blue-600/10'
+                            : 'border-slate-200/80 dark:border-white/[.08] bg-white/70 dark:bg-white/[.04]') },
+                        React.createElement("span", { className: cn('grid size-12 shrink-0 place-items-center rounded-2xl shadow-lg', sub.builtIn === 'default'
+                                ? 'bg-gradient-to-br from-sky-400 to-blue-600 text-white shadow-sky-500/25'
+                                : sub.builtIn === 'demo'
+                                    ? 'bg-gradient-to-br from-violet-500 to-indigo-600 text-white shadow-indigo-500/25'
+                                    : 'bg-gradient-to-br from-cyan-500 to-blue-600 text-white shadow-cyan-500/25') },
+                            React.createElement(Icon, { size: 19 })),
+                        React.createElement("span", { className: "min-w-0 flex-1" },
+                            React.createElement("span", { className: "flex items-center gap-1.5" },
+                                React.createElement("span", { className: "truncate text-[13.5px] font-extrabold text-slate-800 dark:text-slate-100" }, sub.name),
+                                sub.builtIn === 'default' && (React.createElement("span", { className: "shrink-0 rounded-md bg-sky-500/10 px-1.5 py-0.5 text-[8.5px] font-black text-sky-600 dark:text-sky-400" }, "\u0627\u0635\u0644\u06CC"))),
+                            sub.url && (React.createElement("span", { dir: "ltr", className: "mt-0.5 flex items-center justify-end gap-1 truncate text-[9.5px] font-semibold text-slate-400" },
+                                React.createElement(Link2, { size: 9, className: "shrink-0" }),
+                                React.createElement("span", { className: "truncate" }, sub.url))),
+                            React.createElement("span", { className: "num mt-1 block text-[10px] font-bold text-slate-400" },
+                                fa(countFor(sub.id)),
+                                " \u06A9\u0627\u0646\u0641\u06CC\u06AF \u2022 \u0628\u0647\u200C\u0631\u0648\u0632\u0631\u0633\u0627\u0646\u06CC: ",
+                                relTime(sub.updatedAt))),
+                        React.createElement("span", { className: "flex shrink-0 flex-col gap-1.5", onClick: (e) => e.stopPropagation() },
+                            updatable && (React.createElement(IconBtn, { icon: RefreshCw, label: "\u0628\u0647\u200C\u0631\u0648\u0632\u0631\u0633\u0627\u0646\u06CC \u0627\u0634\u062A\u0631\u0627\u06A9", onClick: () => p.onUpdate(sub), spinning: p.busySub === sub.id, active: p.busySub === sub.id })),
+                            deletable ? (React.createElement(IconBtn, { icon: Trash2, label: "\u062D\u0630\u0641 \u0627\u0634\u062A\u0631\u0627\u06A9", onClick: () => p.onDelete(sub), danger: true })) : active ? (React.createElement("span", { className: "grid size-9 place-items-center" },
+                                React.createElement("span", { className: "grid size-6 place-items-center rounded-full bg-blue-600 text-white shadow" },
+                                    React.createElement(Check, { size: 13 })))) : (React.createElement("span", { className: "size-9" })))));
+                }),
+                React.createElement("button", { onClick: p.onAdd, className: "flex w-full items-center justify-center gap-2 rounded-3xl border-2 border-dashed border-blue-400/50 bg-blue-500/5 p-4 text-[13px] font-extrabold text-blue-600 transition active:scale-[.98] dark:text-blue-400" },
+                    React.createElement(Plus, { size: 17 }),
+                    " \u0627\u0641\u0632\u0648\u062F\u0646 \u0627\u0634\u062A\u0631\u0627\u06A9 \u062C\u062F\u06CC\u062F"),
+                React.createElement("p", { className: "mt-1 px-2 text-center text-[10px] leading-6 text-slate-400 dark:text-slate-500" },
+                    React.createElement(Globe, { size: 10, className: "me-1 inline" }),
+                    "\u0628\u0631\u0627\u06CC \u0627\u0646\u062A\u062E\u0627\u0628 \u06AF\u0631\u0648\u0647 \u0641\u0639\u0627\u0644\u060C \u0631\u0648\u06CC \u06A9\u0627\u0631\u062A \u0622\u0646 \u0636\u0631\u0628\u0647 \u0628\u0632\u0646\u06CC\u062F \u2014 \u0627\u062A\u0635\u0627\u0644 \u0647\u0648\u0634\u0645\u0646\u062F \u0627\u0632 \u0645\u06CC\u0627\u0646 \u0647\u0645\u0627\u0646 \u06AF\u0631\u0648\u0647 \u0627\u0646\u062C\u0627\u0645 \u0645\u06CC\u200C\u0634\u0648\u062F.")))));
+}
+
+
+/* ===== App.tsx ===== */
+const idleConn = (results = []) => ({ status: 'idle', total: 0, tested: 0, results });
+const emptyTraffic = { dl: 0, ul: 0, up: [], elapsed: 0 };
+const NAV = [
+    { id: 'home', label: 'خانه', icon: HomeIcon },
+    { id: 'configs', label: 'کانفیگ‌ها', icon: Server },
+    { id: 'subs', label: 'اشتراک‌ها', icon: Rss },
+    { id: 'settings', label: 'تنظیمات', icon: SettingsIcon },
+];
+function App() {
+    const [theme, setTheme] = useState(loadTheme);
+    const [subs, setSubs] = useState(initialSubs);
+    const [configs, setConfigs] = useState(initialConfigs);
+    const [mode, setModeState] = useState(() => loadJSON('abinet.mode.v1', 'auto'));
+    const [manualId, setManualId] = useState(() => loadJSON('abinet.manualId.v1', null));
+    const setMode = (m) => { setModeState(m); saveJSON('abinet.mode.v1', m); };
+    const [selectedSub, setSelectedSub] = useState(loadSel);
+    const [tab, setTab] = useState('home');
+    const tabRef = useRef('home');
+    tabRef.current = tab;
+    const [motion, setMotion] = useState(loadMotion);
+    const [conn, setConn] = useState(idleConn());
+    const [traffic, setTraffic] = useState(emptyTraffic);
+    const [toasts, setToasts] = useState([]);
+    const [menuOpen, setMenuOpen] = useState(false);
+    const [modal, setModal] = useState(null);
+    const [pendingSub, setPendingSub] = useState(null);
+    const [busySub, setBusySub] = useState(null);
+    const [testingIds, setTestingIds] = useState(new Set());
+    const [groupTesting, setGroupTesting] = useState(false);
+    const cancelRef = useRef(false);
+    const toastSeq = useRef(0);
+    const demoVer = useRef(1);
+    /* ---------- persistence & theme ---------- */
+    useEffect(() => {
+        const r = document.documentElement;
+        r.classList.toggle('dark', theme === 'dark');
+        r.classList.toggle('light', theme !== 'dark');
+        persistTheme(theme);
+    }, [theme]);
+    useEffect(() => persistSubs(subs), [subs]);
+    useEffect(() => persistConfigs(configs), [configs]);
+    useEffect(() => persistSel(selectedSub), [selectedSub]);
+    useEffect(() => persistMotion(motion), [motion]);
+    /* ---------- toasts ---------- */
+    const addToast = (type, text) => {
+        const id = ++toastSeq.current;
+        setToasts((t) => [...t.slice(-2), { id, type, text }]);
+        setTimeout(() => setToasts((t) => t.filter((x) => x.id !== id)), 4200);
+    };
+    const effectiveList = useMemo(() => (selectedSub === ALL_SUB_ID ? configs : configs.filter((c) => c.subId === selectedSub)), [configs, selectedSub]);
+    const status = conn.status;
+    /* ---------- connection engine ---------- */
+    const doDisconnect = (msg) => {
+        cancelRef.current = false;
+        void vpnCore.stop();
+        setConn((prev) => idleConn(prev.results));
+        setTraffic(emptyTraffic);
+        if (msg)
+            addToast('info', msg);
+    };
+    useEffect(() => { requestAnimationFrame(() => window.__bluReady && window.__bluReady()); }, []);
+    useEffect(() => {
+        if (!window.AbinetNative) return;
+        vpnCore.onState((s, m) => {
+            if (s === 'disconnected')
+                setConn((prev) => (prev.status === 'connected' && Date.now() - (prev.startedAt || 0) > 3000 ? idleConn(prev.results) : prev));
+            if (s === 'error') {
+                setConn((prev) => (prev.status === 'connected' || prev.status === 'connecting' ? idleConn(prev.results) : prev));
+                addToast('error', m || 'خطا در اتصال');
+            }
+        });
+        vpnCore.onExit((x) => setConn((prev) => (prev.status === 'connected' ? { ...prev, mIp: x.ip || '', mCountry: x.country || '', exitDone: true } : prev)));
+        if (!loadJSON('blu.defaults.v1', false)) abiCall('applyDefaults', { values: BLU_DEFAULTS }).then(() => saveJSON('blu.defaults.v1', true)).catch(() => {});
+    }, []);
+    const connectedPatch = (cfg) => ({ declared: declaredInfo(cfg), mIp: '', mCountry: '', exitDone: false });
+    const armExitTimeout = () => setTimeout(() => setConn((prev) => (prev.status === 'connected' && !prev.exitDone ? { ...prev, exitDone: true } : prev)), 15000);
+    const bindStats = (started) => vpnCore.onStats((s) => tabRef.current === 'home' && setTraffic((prev) => ({ dl: s.download, ul: s.upload, up: [...prev.up, s.download].slice(-42), elapsed: Math.floor((Date.now() - started) / 1000) })));
+    /** اتصال دستی به یک کانفیگ مشخص (ثابت می‌ماند تا کاربر قطع کند) */
+    const connectTo = async (cfg) => {
+        cancelRef.current = false;
+        if (conn.status === 'testing' || conn.status === 'connecting')
+            return;
+        if (conn.status === 'connected') {
+            await vpnCore.stop();
+            await sleep(800);
+        }
+        setTraffic(emptyTraffic);
+        setConn((prev) => ({ status: 'connecting', total: 0, tested: 0, results: prev.results || [], best: cfg, bestPing: cfg.ping > 0 ? cfg.ping : undefined, speed: 0 }));
+        bindStats(Date.now());
+        try {
+            await vpnCore.start({ ...cfg });
+        }
+        catch (e) {
+            setConn((prev) => idleConn(prev.results));
+            addToast('error', 'اتصال برقرار نشد: ' + ((e && e.message) || ''));
+            return;
+        }
+        setConn((prev) => ({ ...prev, ...connectedPatch(cfg), status: 'connected', speed: 0, startedAt: Date.now(), ip: window.AbinetNative ? '' : fakeIp(cfg.server) }));
+        addToast('success', `به «${cfg.name}» متصل شدید`);
+        if (vpnCore.testCurrent) { setTimeout(() => vpnCore.testCurrent(), 2500); armExitTimeout(); }
+    };
+    const handleConnectCfg = (cfg) => { setMode('manual'); setManualId(cfg.id); saveJSON('abinet.manualId.v1', cfg.id); void connectTo(cfg); };
+    const handleOrb = async () => {
+        if (conn.status === 'connected')
+            return doDisconnect('اتصال قطع شد');
+        if (conn.status === 'testing' || conn.status === 'connecting') {
+            cancelRef.current = true;
+            addToast('info', 'در حال لغو…');
+            return;
+        }
+        if (mode === 'manual') {
+            const mc = configs.find((c) => c.id === manualId);
+            if (!mc) { addToast('error', 'ابتدا از تب «کانفیگ‌ها» یک کانفیگ انتخاب کنید'); setTab('configs'); return; }
+            return connectTo(mc);
+        }
+        if (mode === 'sub' && selectedSub === ALL_SUB_ID) { addToast('error', 'ابتدا یک اشتراک را از بالای صفحه انتخاب کنید'); return; }
+        const list = mode === 'auto' ? [...configs] : [...effectiveList];
+        if (!list.length) {
+            addToast('error', 'در این گروه کانفیگی وجود ندارد؛ ابتدا کانفیگ یا اشتراک اضافه کنید.');
+            setModal('fab');
+            return;
+        }
+        cancelRef.current = false;
+        setConn({ status: 'testing', total: list.length, tested: 0, results: [] });
+        const results = [];
+        const queue = [...list];
+        const workers = Array.from({ length: Math.min(3, queue.length) }, async () => {
+            while (queue.length) {
+                if (cancelRef.current)
+                    return;
+                const cfg = queue.shift();
+                const ping = await vpnCore.testDelay(cfg);
+                results.push({ configId: cfg.id, ping });
+                setConfigs((prev) => prev.map((c) => (c.id === cfg.id ? { ...c, ping } : c)));
+                setConn((prev) => (prev.status === 'testing' ? { ...prev, tested: results.length, results: [...results] } : prev));
+            }
+        });
+        await Promise.all(workers);
+        if (cancelRef.current) {
+            setConn(idleConn(results));
+            addToast('info', 'تست لغو شد');
+            return;
+        }
+        const ok = results.filter((r) => r.ping >= 0);
+        if (!ok.length) {
+            setConn(idleConn(results));
+            addToast('error', 'هیچ سروری پاسخ نداد؛ دوباره تلاش کنید.');
+            return;
+        }
+        ok.sort((a, b) => a.ping - b.ping);
+        const bestR = ok[0];
+        const best = list.find((c) => c.id === bestR.configId);
+        // speed test + tunnel handshake
+        setConn((prev) => ({ ...prev, status: 'connecting', best, bestPing: bestR.ping, speed: 0, results: [...results] }));
+        const target = window.AbinetNative ? 0 : speedFromPing(bestR.ping);
+if (!window.AbinetNative) {
+        for (let i = 1; i <= 26; i++) {
+            if (cancelRef.current) {
+                setConn(idleConn(results));
+                addToast('info', 'اتصال لغو شد');
+                return;
+            }
+            await sleep(50 + Math.random() * 45);
+            const t = i / 26;
+            const eased = 1 - Math.pow(1 - t, 3);
+            const wobble = t < 1 ? Math.sin(i * 2.3) * target * 0.03 : 0;
+            const val = Math.max(0.2, target * eased + wobble);
+            setConn((prev) => (prev.status === 'connecting' ? { ...prev, speed: Math.round(val * 10) / 10 } : prev));
+        }
+        await sleep(380);
+        if (cancelRef.current) {
+            setConn(idleConn(results));
+            addToast('info', 'اتصال لغو شد');
+            return;
+        }
+        }
+// اتصال از طریق هسته VPN (در نسخه نیتیو، همین‌جا تونل واقعی برقرار می‌شود)
+        const started = Date.now();
+        vpnCore.onStats((s) => {
+            if (tabRef.current !== 'home') return;
+            setTraffic((prev) => ({
+                dl: s.download,
+                ul: s.upload,
+                up: [...prev.up, s.download].slice(-42),
+                elapsed: Math.floor((Date.now() - started) / 1000),
+            }));
+        });
+        try { await vpnCore.start({ ...best, ping: bestR.ping }); }
+        catch (e) { setConn(idleConn(results)); addToast('error', 'اتصال برقرار نشد: ' + ((e && e.message) || '')); return; }
+        if (vpnCore.testCurrent) { setTimeout(() => vpnCore.testCurrent(), 2500); armExitTimeout(); }
+        setTraffic({ dl: target, ul: Math.round(target * 0.22 * 10) / 10, up: [target], elapsed: 0 });
+        setConn((prev) => ({ ...prev, ...connectedPatch(best), status: 'connected', speed: target, startedAt: started, ip: window.AbinetNative ? '' : fakeIp(best.server) }));
+        addToast('success', `به «${best.name}» متصل شدید`);
+    };
+    /* ---------- config actions ---------- */
+    const handleManualAdd = (text) => {
+        const lines = String(text || '').split(/\r?\n/).flatMap((l) => l.trim().split(/\s+(?=[a-z][a-z0-9+.-]*:\/\/)/i)).map((l) => l.trim()).filter(Boolean);
+        const isSub = (l) => /^https?:\/\/\S+$/i.test(l);
+        const urls = [...new Set(lines.filter(isSub))];
+        const parsed = parseImportText(lines.filter((l) => !isSub(l)).join('\n'));
+        if (!parsed.length && !urls.length)
+            return false;
+        const have = new Set(configs.map((c) => c.raw));
+        const fresh = parsed.filter((pp) => !have.has(pp.raw));
+        const now = Date.now();
+        if (fresh.length)
+            setConfigs((prev) => [...prev, ...fresh.map((pp, i) => ({ id: randId() + i, raw: pp.raw, name: pp.name, protocol: pp.protocol, server: pp.server, port: pp.port, subId: DEFAULT_SUB_ID, addedAt: now + i }))]);
+        const newSubs = urls.filter((u) => !subs.some((s) => s.url === u)).map((u) => ({ id: randId(), name: subNameFromUrl(u), url: u, updatedAt: Date.now() }));
+        if (newSubs.length)
+            setSubs((prev) => [...prev, ...newSubs]);
+        const parts = [];
+        if (fresh.length)
+            parts.push(`${fa(fresh.length)} کانفیگ`);
+        if (newSubs.length)
+            parts.push(`${fa(newSubs.length)} اشتراک`);
+        if (!fresh.length && !newSubs.length)
+            addToast('info', 'این موارد قبلاً اضافه شده‌اند');
+        else
+            addToast('success', parts.join(' و ') + ' اضافه شد');
+        setModal(null);
+        void (async () => { for (const s of newSubs)
+            await runSubUpdate(s); })();
+        return true;
+    };
+    const handleAddClipboard = async () => {
+        setModal(null);
+        let text = '';
+        try {
+            text = window.AbinetNative ? (await abiCall('readClipboard')).text : await navigator.clipboard.readText();
+        }
+        catch {
+            text = '';
+        }
+        if (!text || !text.trim()) {
+            addToast('error', 'کلیپ‌بورد خالی است؛ ابتدا لینک را کپی کنید.');
+            return;
+        }
+        if (!handleManualAdd(text))
+            addToast('error', 'کانفیگ یا لینک اشتراک معتبری در کلیپ‌بورد پیدا نشد.');
+    };
+    const handleScanQr = async () => {
+        if (!window.AbinetNative) {
+            addToast('info', 'اسکن QR فقط در برنامه‌ی اندروید کار می‌کند.');
+            return;
+        }
+        try {
+            const r = await abiCall('scanQr');
+            if (!handleManualAdd(r.text))
+                addToast('error', 'QR کد شامل کانفیگ یا اشتراک معتبر نبود.');
+        }
+        catch { /* لغو شد */ }
+    };
+    const [exportIds, setExportIds] = useState([]);
+    const copyText = async (text, count) => {
+        try {
+            if (window.AbinetNative)
+                await abiCall('writeClipboard', { text });
+            else
+                await navigator.clipboard.writeText(text);
+            addToast('success', `${fa(count)} لینک کپی شد`);
+        }
+        catch {
+            addToast('error', 'کپی انجام نشد');
+        }
+    };
+    const handlePick = (cfg) => {
+        setMode('manual');
+        setManualId(cfg.id);
+        saveJSON('abinet.manualId.v1', cfg.id);
+        addToast('success', `«${cfg.name}» انتخاب شد؛ از صفحه‌ی خانه وصل شوید`);
+    };
+    const handleApplySort = (rank) => {
+        setConfigs((prev) => prev.map((c) => (rank[c.id] !== undefined ? { ...c, rank: rank[c.id] } : c)));
+        addToast('success', 'کانفیگ‌ها بر اساس پینگ مرتب شدند');
+    };
+    const handleDeleteMany = (ids) => {
+        const set = new Set(ids);
+        setConfigs((prev) => prev.filter((c) => !set.has(c.id)));
+        if (conn.best && set.has(conn.best.id))
+            doDisconnect('سرور فعلی حذف شد؛ اتصال قطع شد');
+        addToast('info', `${fa(ids.length)} کانفیگ حذف شد`);
+    };
+    const handleDeleteConfig = (id) => {
+        setConfigs((prev) => prev.filter((c) => c.id !== id));
+        if (conn.best?.id === id)
+            doDisconnect('سرور فعلی حذف شد؛ اتصال قطع شد');
+        addToast('info', 'کانفیگ حذف شد');
+    };
+    const handleTestOne = async (id) => {
+        if (testingIds.has(id))
+            return;
+        const cfg = configs.find((c) => c.id === id);
+        if (!cfg)
+            return;
+        setTestingIds((prev) => new Set(prev).add(id));
+        const ping = await vpnCore.testDelay(cfg);
+        setConfigs((prev) => prev.map((c) => (c.id === id ? { ...c, ping } : c)));
+        setTestingIds((prev) => {
+            const next = new Set(prev);
+            next.delete(id);
+            return next;
+        });
+    };
+    const handleTestGroup = async () => {
+        if (groupTesting || conn.status !== 'idle')
+            return;
+        const list = [...effectiveList];
+        if (!list.length) {
+            addToast('error', 'کانفیگی برای تست وجود ندارد.');
+            return;
+        }
+        setGroupTesting(true);
+        const queue = [...list];
+        const workers = Array.from({ length: Math.min(4, queue.length) }, async () => {
+            while (queue.length) {
+                const cfg = queue.shift();
+                setTestingIds((prev) => new Set(prev).add(cfg.id));
+                const ping = await vpnCore.testDelay(cfg);
+                setConfigs((prev) => prev.map((c) => (c.id === cfg.id ? { ...c, ping } : c)));
+                setTestingIds((prev) => {
+                    const next = new Set(prev);
+                    next.delete(cfg.id);
+                    return next;
+                });
+            }
+        });
+        await Promise.all(workers);
+        setGroupTesting(false);
+        addToast('success', `تست پینگ ${fa(list.length)} کانفیگ کامل شد`);
+    };
+    /* ---------- subscriptions ---------- */
+    const runSubUpdate = async (sub) => {
+        if (sub.builtIn === 'default') {
+            addToast('info', 'اشتراک پیش‌فرض لینکی ندارد؛ کانفیگ‌ها را دستی یا از کلیپ‌بورد اضافه کنید.');
+            return;
+        }
+        if (busySub)
+            return;
+        setBusySub(sub.id);
+        try {
+            let items;
+            if (sub.builtIn === 'demo') {
+                await sleep(1000);
+                demoVer.current += 1;
+                items = makeDemoConfigs(demoVer.current);
+            }
+            else {
+                const body = await fetchSubscription(sub.url);
+                const parsed = parseImportText(body);
+                if (!parsed.length)
+                    throw new Error('empty subscription');
+                const now = Date.now();
+                items = parsed.map((pp, i) => ({
+                    id: randId() + i,
+                    raw: pp.raw,
+                    name: pp.name,
+                    protocol: pp.protocol,
+                    server: pp.server,
+                    port: pp.port,
+                    subId: sub.id,
+                    addedAt: now + i,
+                }));
+            }
+            setConfigs((prev) => [...prev.filter((c) => c.subId !== sub.id), ...items]);
+            setSubs((prev) => prev.map((s) => (s.id === sub.id ? { ...s, updatedAt: Date.now() } : s)));
+            if (conn.best && conn.best.subId === sub.id)
+                doDisconnect('اشتراک به‌روزرسانی شد؛ اتصال قطع شد');
+            addToast('success', `${fa(items.length)} کانفیگ از «${sub.name}» دریافت شد`);
+        }
+        catch {
+            addToast('error', 'دریافت اشتراک ناموفق بود؛ لینک یا اتصال اینترنت را بررسی کنید و دوباره به‌روزرسانی کنید.');
+        }
+        finally {
+            setBusySub(null);
+        }
+    };
+    const handleAddSub = (name, url) => {
+        const sub = { id: randId(), name, url, updatedAt: Date.now() };
+        setSubs((prev) => [...prev, sub]);
+        setModal(null);
+        addToast('success', `اشتراک «${name}» ذخیره شد`);
+        void runSubUpdate(sub);
+    };
+    const confirmDeleteSub = () => {
+        if (!pendingSub)
+            return;
+        const sub = pendingSub;
+        setSubs((prev) => prev.filter((s) => s.id !== sub.id));
+        setConfigs((prev) => prev.filter((c) => c.subId !== sub.id));
+        if (selectedSub === sub.id)
+            setSelectedSub(ALL_SUB_ID);
+        if (conn.best && conn.best.subId === sub.id)
+            doDisconnect('اشتراک حذف شد؛ اتصال قطع شد');
+        setPendingSub(null);
+        setModal(null);
+        addToast('info', `اشتراک «${sub.name}» حذف شد`);
+    };
+    const doReset = () => {
+        cancelRef.current = true;
+        void vpnCore.stop();
+        wipeAll();
+        demoVer.current = 1;
+        setSubs(seedSubs());
+        setConfigs(seedConfigs());
+        setSelectedSub(ALL_SUB_ID);
+        setConn(idleConn());
+        setTraffic(emptyTraffic);
+        setModal(null);
+        setTab('home');
+        addToast('success', 'برنامه به حالت اولیه بازنشانی شد');
+        setTimeout(() => (cancelRef.current = false), 600);
+    };
+    const connBusy = conn.status !== 'idle';
+    /* ---------- download self-contained installer ---------- */
+    const downloadWebApp = () => {
+        try {
+            const doc = '<!doctype html>\n' + document.documentElement.outerHTML;
+            const blob = new Blob([doc], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'BluNet.html';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            setTimeout(() => URL.revokeObjectURL(url), 4000);
+            addToast('success', 'فایل برنامه دانلود شد؛ آن را روی گوشی باز یا روی هاست آپلود کنید.');
+        }
+        catch {
+            addToast('error', 'دانلود در این مرورگر پشتیبانی نمی‌شود.');
+        }
+    };
+    /* ---------- render ---------- */
+    return (React.createElement("div", { className: "relative min-h-dvh w-full overflow-hidden bg-[#dce7f7] dark:bg-[#020409]" },
+        React.createElement("div", { className: "pointer-events-none absolute inset-0" },
+            React.createElement("div", { className: "absolute -top-32 start-[-15%] size-[34rem] rounded-full bg-[radial-gradient(circle_closest-side,rgba(59,130,246,.26),transparent)] dark:bg-[radial-gradient(circle_closest-side,rgba(37,99,235,.2),transparent)]" }),
+            React.createElement("div", { className: "absolute -bottom-40 end-[-10%] size-[30rem] rounded-full bg-[radial-gradient(circle_closest-side,rgba(34,211,238,.22),transparent)] dark:bg-[radial-gradient(circle_closest-side,rgba(79,70,229,.2),transparent)]" }),
+            React.createElement("div", { className: "bg-grid absolute inset-0 opacity-70" }),
+            React.createElement("div", { className: "absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(2,6,23,.12))]" })),
+        React.createElement("div", { className: "relative z-10 mx-auto flex min-h-dvh w-full max-w-[430px] items-stretch sm:items-center sm:py-6" },
+            React.createElement("div", { className: "relative flex h-dvh w-full flex-col overflow-hidden bg-[#eef3fc] dark:bg-[#04060e] sm:h-[min(880px,calc(100dvh-3rem))] sm:rounded-[2.75rem] sm:border sm:border-white/70 dark:sm:border-white/10 sm:shadow-[0_50px_140px_-40px_rgba(30,64,175,.55)]" },
+                React.createElement("div", { className: "pointer-events-none absolute inset-x-0 top-0 z-0 h-64 bg-[radial-gradient(60%_100%_at_50%_0%,rgba(59,130,246,.16),transparent)] dark:bg-[radial-gradient(60%_100%_at_50%_0%,rgba(37,99,235,.22),transparent)]" }),
+                React.createElement("header", { className: "relative z-20 flex items-center gap-3 px-5 pb-2 pt-4" },
+                    React.createElement("button", { onClick: () => setMenuOpen(true), "aria-label": "منو", className: "grid size-11 place-items-center rounded-2xl border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5 text-slate-600 dark:text-slate-300 transition active:scale-95" },
+                        React.createElement(Menu, { size: 22 })),
+                    React.createElement("div", { className: "flex-1" }),
+                    React.createElement("span", { className: cn('flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-black', status === 'connected'
+                            ? 'border-cyan-400/40 bg-cyan-400/10 text-cyan-600 dark:text-cyan-400'
+                            : connBusy
+                                ? 'border-amber-400/40 bg-amber-400/10 text-amber-600 dark:text-amber-400'
+                                : 'border-slate-300/70 dark:border-white/10 bg-slate-100/60 dark:bg-white/5 text-slate-400 dark:text-slate-500') },
+                        React.createElement("span", { className: cn('size-1.5 rounded-full', status === 'connected' ? 'animate-blink bg-cyan-400' : connBusy ? 'animate-blink bg-amber-400' : 'bg-slate-400') }),
+                        status === 'connected' ? 'متصل' : status === 'testing' ? 'تست پینگ' : status === 'connecting' ? 'در حال اتصال' : 'آفلاین'),
+                    React.createElement("button", { onClick: () => setTheme(theme === 'dark' ? 'light' : 'dark'), "aria-label": "\u062A\u063A\u06CC\u06CC\u0631 \u067E\u0648\u0633\u062A\u0647", className: "grid size-9 place-items-center rounded-xl border border-slate-200 dark:border-white/10 bg-white/70 dark:bg-white/5 text-slate-500 dark:text-slate-300 transition active:scale-90" }, theme === 'dark' ? React.createElement(Sun, { size: 16 }) : React.createElement(Moon, { size: 16 }))),
+                React.createElement("main", { className: "relative z-10 min-h-0 flex-1 overflow-hidden" },
+                    tab === 'home' && (React.createElement(HomeTab, { conn: conn, traffic: traffic, subs: subs, configs: configs, effective: effectiveList, selectedSub: selectedSub, onSelectSub: setSelectedSub, onOrb: handleOrb, mode: mode, onMode: setMode, manualCfg: configs.find((c) => c.id === manualId), onEmptyAdd: () => setModal('fab'), motion: motion })),
+                    tab === 'configs' && (React.createElement(ConfigsTab, { subs: subs, configs: configs, selectedSub: selectedSub, onAddClipboard: handleAddClipboard, onAddManual: () => setModal('addConfig'), onDelete: handleDeleteConfig, onTestOne: handleTestOne, onPick: handlePick, onApplySort: handleApplySort, onScanQr: handleScanQr, onOpenExport: (ids) => { setExportIds(ids); setModal('export'); }, onDeleteMany: handleDeleteMany, activeId: conn.status === 'connected' && conn.best ? conn.best.id : null, manualId: manualId, mode: mode, onTestGroup: handleTestGroup, testingIds: testingIds, groupTesting: groupTesting, connBusy: connBusy })),
+                    tab === 'subs' && (React.createElement(SubsTab, { subs: subs, configs: configs, selectedSub: selectedSub, onSelect: setSelectedSub, onUpdate: runSubUpdate, onDelete: (s) => {
+                            setPendingSub(s);
+                            setModal('deleteSub');
+                        }, onAdd: () => setModal('addSub'), busySub: busySub })),
+                    tab === 'settings' && (React.createElement(SettingsTab, { theme: theme, setTheme: setTheme, motion: motion, setMotion: setMotion, onReset: () => setModal('reset'), totalConfigs: configs.length, totalSubs: subs.length }))),
+                (tab === 'configs' || tab === 'subs') && (React.createElement("button", { onClick: () => setModal('fab'), "aria-label": "\u0627\u0641\u0632\u0648\u062F\u0646", className: "animate-pop absolute bottom-24 left-4 z-40 grid size-14 place-items-center rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-xl shadow-blue-600/40 transition active:scale-90" },
+                    React.createElement(Plus, { size: 26 }))),
+                React.createElement("nav", { className: "relative z-20 border-t border-slate-200/80 dark:border-white/[.06] bg-white/95 dark:bg-[#060b18]/95 px-3 pb-[max(env(safe-area-inset-bottom),10px)] pt-2" },
+                    React.createElement("div", { className: "flex items-center" }, NAV.map((item) => {
+                        const active = tab === item.id;
+                        return (React.createElement("button", { key: item.id, onClick: () => setTab(item.id), className: "flex flex-1 flex-col items-center gap-1 py-1" },
+                            React.createElement("span", { className: cn('grid h-8 w-14 place-items-center rounded-full transition-all duration-300', active ? 'bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-600/30' : 'text-slate-400 dark:text-slate-500') },
+                                React.createElement(item.icon, { size: 18 })),
+                            React.createElement("span", { className: cn('text-[9.5px] font-black transition-colors', active ? 'text-blue-600 dark:text-blue-400' : 'text-slate-400 dark:text-slate-600') }, item.label)));
+                    }))),
+                menuOpen && React.createElement(MenuDrawer, { onClose: () => setMenuOpen(false) }),
+        modal === 'export' && React.createElement(ExportSheet, { configs: configs, subs: subs, ids: exportIds, onClose: () => setModal(null), onCopy: copyText }),
+                modal === 'addSub' && React.createElement(AddSubSheet, { onClose: () => setModal(null), onAdd: handleAddSub }),
+                modal === 'addConfig' && React.createElement(AddConfigSheet, { onClose: () => setModal(null), onAdd: handleManualAdd }),
+                modal === 'fab' && (React.createElement(Sheet, { onClose: () => setModal(null), title: "\u0627\u0641\u0632\u0648\u062F\u0646", icon: Plus },
+                    React.createElement("div", { className: "flex flex-col gap-2" }, [
+                        {
+                            icon: Rss,
+                            title: 'افزودن اشتراک',
+                            desc: 'با لینک اشتراک، کانفیگ‌ها به‌صورت خودکار دریافت می‌شوند',
+                            act: () => setModal('addSub'),
+                        },
+                        {
+                            icon: ClipboardPaste,
+                            title: 'افزودن از کلیپ‌بورد',
+                            desc: 'کانفیگ‌های کپی‌شده به اشتراک «پیش‌فرض» اضافه می‌شوند',
+                            act: handleAddClipboard,
+                        },
+                        {
+                            icon: PenLine,
+                            title: 'افزودن دستی کانفیگ',
+                            desc: 'هر خط یک کانفیگ (vless, vmess, trojan, ss, …)',
+                            act: () => setModal('addConfig'),
+                        },
+                    ].map((row) => (React.createElement("button", { key: row.title, onClick: row.act, className: "flex w-full items-center gap-3 rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white/60 dark:bg-white/[.04] p-3.5 text-start transition active:scale-[.98]" },
+                        React.createElement("span", { className: "grid size-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-md shadow-blue-600/25" },
+                            React.createElement(row.icon, { size: 18 })),
+                        React.createElement("span", { className: "min-w-0 flex-1" },
+                            React.createElement("span", { className: "block text-[13px] font-extrabold text-slate-700 dark:text-slate-200" }, row.title),
+                            React.createElement("span", { className: "mt-0.5 block text-[10px] font-semibold leading-4 text-slate-400" }, row.desc)))))))),
+                modal === 'deleteSub' && pendingSub && (React.createElement(ConfirmSheet, { title: "\u062D\u0630\u0641 \u0627\u0634\u062A\u0631\u0627\u06A9", desc: `اشتراک «${pendingSub.name}» به‌همراه ${fa(configs.filter((c) => c.subId === pendingSub.id).length)} کانفیگش برای همیشه حذف می‌شود.`, confirmLabel: "\u062D\u0630\u0641 \u0627\u0634\u062A\u0631\u0627\u06A9", onConfirm: confirmDeleteSub, onClose: () => {
+                        setPendingSub(null);
+                        setModal(null);
+                    } })),
+                modal === 'reset' && (React.createElement(ConfirmSheet, { title: "\u0628\u0627\u0632\u0646\u0634\u0627\u0646\u06CC \u0628\u0631\u0646\u0627\u0645\u0647", desc: "\u062A\u0645\u0627\u0645 \u0627\u0634\u062A\u0631\u0627\u06A9\u200C\u0647\u0627\u060C \u06A9\u0627\u0646\u0641\u06CC\u06AF\u200C\u0647\u0627 \u0648 \u062A\u0646\u0638\u06CC\u0645\u0627\u062A \u062D\u0630\u0641 \u0634\u062F\u0647 \u0648 \u0628\u0631\u0646\u0627\u0645\u0647 \u0628\u0647 \u062D\u0627\u0644\u062A \u0627\u0648\u0644\u06CC\u0647 \u0628\u0627\u0632\u0645\u06CC\u200C\u06AF\u0631\u062F\u062F. \u0627\u06CC\u0646 \u0639\u0645\u0644 \u0642\u0627\u0628\u0644 \u0628\u0627\u0632\u06AF\u0634\u062A \u0646\u06CC\u0633\u062A.", confirmLabel: "\u0628\u0627\u0632\u0646\u0634\u0627\u0646\u06CC", onConfirm: doReset, onClose: () => setModal(null) })),
+                React.createElement(ToastStack, { toasts: toasts })))));
+}
+
+/* ===== aliases (from renamed default imports in App.tsx) ===== */
+const HomeTab = Home;
+const ConfigsTab = Configs;
+const SubsTab = Subs;
+const SettingsTab = Settings;
+
+/* ===== main.tsx ===== */
+createRoot(document.getElementById("root")).render(
+  React.createElement(StrictMode, null, React.createElement(App))
+);
+    </script>
+  </body>
+</html>
